@@ -4,6 +4,6 @@ output "codebuild_project_name" {
 }
 
 output "codebuild_package_etag" {
-  value       = filemd5("${path.module}/codebuild_files/wordpress_docker.zip")
+  value       = data.archive_file.code_build_package.output_md5
   description = "The etag of the codebuild package file."
 }
