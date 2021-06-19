@@ -1,0 +1,66 @@
+---
+name: test-suite-master
+# yamllint disable-line rule:truthy
+on:
+  push:
+    branches:
+      - master
+jobs:
+  tflint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2.3.4
+      - name: setup Terraform
+        uses: hashicorp/setup-terraform@v1.3.2
+        with:
+          terraform_version: 0.15.5
+      - name: Terraform init
+        run: terraform init --backend=false
+      - name: tflint
+        uses: reviewdog/action-tflint@master
+        with:
+          github_token: ${{ secrets.ACTIONS_TOKEN }}
+          reporter: github-check
+          filter_mode: added
+          flags: --module
+          level: error
+  tfsec:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2.3.4
+      - name: setup Terraform
+        uses: hashicorp/setup-terraform@v1.3.2
+        with:
+          terraform_version: 0.15.5
+      - name: Terraform init
+        run: terraform init --backend=false
+      - name: tfsec
+        uses: reviewdog/action-tfsec@master
+        with:
+          github_token: ${{ secrets.ACTIONS_TOKEN }}
+          reporter: github-check
+          filter_mode: added
+          level: warning
+  misspell:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2.3.4
+      - name: misspell
+        uses: reviewdog/action-misspell@v1
+        with:
+          github_token: ${{ secrets.ACTIONS_TOKEN }}
+          locale: "US"
+          reporter: github-check
+          filter_mode: added
+          level: error
+  yamllint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2.3.4
+      - name: yamllint
+        uses: reviewdog/action-yamllint@v1.2.0
+        with:
+          github_token: ${{ secrets.ACTIONS_TOKEN }}
+          reporter: github-check
+          filter_mode: added
+          level: error

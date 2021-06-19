@@ -1,0 +1,12 @@
+ARG aws_account_id
+ARG aws_region
+ARG ecr_repo_name
+
+FROM ${aws_account_id}.dkr.ecr.${aws_region}.amazonaws.com/${ecr_repo_name}:base
+COPY ["wp-cli.phar", "serverless-wordpress-wp2static.zip","serverless-wordpress-s3-addon.zip","/tmp/"]
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN apt-get update && apt-get install -y sudo jq awscli mariadb-client && chmod +x /usr/local/bin/docker-entrypoint.sh && chmod +x /tmp/wp-cli.phar && mv /tmp/wp-cli.phar /usr/local/bin/wp \
+&& rm -rf /var/lib/apt/lists/*
+
+RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
+COPY ["php.ini", "$PHP_INI_DIR/conf.d/"]

@@ -1,0 +1,73 @@
+---
+repos:
+  - repo: local
+    hooks:
+      - id: terraform-docs-main
+        name: terraform-docs-main
+        language: docker_image
+        entry: quay.io/terraform-docs/terraform-docs:latest
+        args: ["--output-file", "README.md", "markdown", "."]
+        pass_filenames: false
+      - id: terraform-docs-cloudfront
+        name: terraform-docs-cloudfront
+        language: docker_image
+        entry: quay.io/terraform-docs/terraform-docs:latest
+        args: ["--output-file", "README.md", "markdown", "modules/cloudfront"]
+        pass_filenames: false
+      - id: terraform-docs-codebuild
+        name: terraform-docs-codebuild
+        language: docker_image
+        entry: quay.io/terraform-docs/terraform-docs:latest
+        args: ["--output-file", "README.md", "markdown", "modules/codebuild"]
+        pass_filenames: false
+      - id: terraform-docs-lambda_slack
+        name: terraform-docs-lambda_slack
+        language: docker_image
+        entry: quay.io/terraform-docs/terraform-docs:latest
+        args: ["--output-file", "README.md", "markdown", "modules/lambda_slack"]
+        pass_filenames: false
+      - id: terraform-docs-waf
+        name: terraform-docs-waf
+        language: docker_image
+        entry: quay.io/terraform-docs/terraform-docs:latest
+        args: ["--output-file", "README.md", "markdown", "modules/waf"]
+        pass_filenames: false
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.31.0
+    hooks:
+      - id: terraform_fmt
+      - id: terraform_tflint
+        alias: terraform_tflint_nocreds
+        name: terraform_tflint_nocreds
+      - id: terraform_tfsec
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v3.0.0
+    hooks:
+      - id: check-case-conflict
+      # - id: check-json
+      - id: check-merge-conflict
+      - id: check-symlinks
+      - id: check-yaml
+        args:
+          - --unsafe
+      - id: end-of-file-fixer
+      - id: mixed-line-ending
+        args:
+          - --fix=lf
+      - id: no-commit-to-branch
+        args:
+          - --branch
+          - main
+          - --branch
+          - master
+          - --branch
+          - prod
+      # - id: pretty-format-json
+      #   args:
+      #     - --autofix
+      #     - --top-keys=name,Name
+      - id: trailing-whitespace
+        args:
+          - --markdown-linebreak-ext=md
+        exclude: README.md

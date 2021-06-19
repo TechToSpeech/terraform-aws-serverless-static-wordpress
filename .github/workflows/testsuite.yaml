@@ -1,0 +1,93 @@
+---
+name: test-suite
+# yamllint disable-line rule:truthy
+on:
+  pull_request:
+jobs:
+  pre-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2.3.4
+      - name: Set up Python
+        uses: actions/setup-python@v2.2.2
+      - name: Install prerequisites
+        run: ./bin/install-ubuntu.sh
+      - name: Terraform init
+        run: terraform init --backend=false
+      - name: pre-commit
+        uses: pre-commit/action@v2.0.3
+        env:
+          AWS_DEFAULT_REGION: eu-west-1
+          # many of these are covered by better reviewdog linters below
+          SKIP: >-
+            terraform_tflint_deep,
+            no-commit-to-branch,
+            terraform_tflint_nocreds,
+            terraform_tfsec
+      - uses: stefanzweifel/git-auto-commit-action@v4.11.0
+        if: ${{ failure() }}
+        with:
+          commit_message: Apply automatic changes
+          commit_options: "--no-verify"
+          # Optional commit user and author settings
+          commit_user_name: Linter Bot
+          commit_user_email: noreply@techtospeech.com
+          commit_author: Linter Bot <actions@github.com>
+  tflint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2.3.4
+      - name: setup Terraform
+        uses: hashicorp/setup-terraform@v1.3.2
+        with:
+          terraform_version: 0.15.5
+      - name: Terraform init
+        run: terraform init --backend=false
+      - name: tflint
+        uses: reviewdog/action-tflint@master
+        with:
+          github_token: ${{ secrets.ACTIONS_TOKEN }}
+          reporter: github-pr-check
+          filter_mode: added
+          flags: --module
+          level: error
+  tfsec:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2.3.4
+      - name: setup Terraform
+        uses: hashicorp/setup-terraform@v1.3.2
+        with:
+          terraform_version: 0.15.5
+      - name: Terraform init
+        run: terraform init --backend=false
+      - name: tfsec
+        uses: reviewdog/action-tfsec@master
+        with:
+          github_token: ${{ secrets.ACTIONS_TOKEN }}
+          reporter: github-pr-check
+          filter_mode: added
+          level: warning
+  misspell:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2.3.4
+      - name: misspell
+        uses: reviewdog/action-misspell@v1
+        with:
+          github_token: ${{ secrets.ACTIONS_TOKEN }}
+          locale: "US"
+          reporter: github-pr-check
+          filter_mode: added
+          level: error
+  yamllint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2.3.4
+      - name: yamllint
+        uses: reviewdog/action-yamllint@v1.2.0
+        with:
+          github_token: ${{ secrets.ACTIONS_TOKEN }}
+          reporter: github-pr-check
+          filter_mode: added
+          level: error

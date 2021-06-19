@@ -1,0 +1,48 @@
+[
+        ${jsonencode({
+    "cpu": tonumber(container_cpu),
+    "environment": [
+        {"name": "ECS_ENABLE_CONTAINER_METADATA", "value": "true"},
+        {"name": "WORDPRESS_DB_HOST", "value": "${db_host}"},
+        {"name": "WORDPRESS_DB_USER", "value": "${db_user}"},
+        {"name": "WORDPRESS_DB_PASSWORD", "value": "${db_password}"},
+        {"name": "WORDPRESS_DB_NAME", "value": "${db_name}"},
+        {"name": "WPSTATIC_DEST", "value": "${wp_dest}"},
+        {"name": "WPSTATIC_REGION", "value": "${wp_region}"},
+        {"name": "WPSTATIC_BUCKET", "value": "${wp_bucket}"},
+        {"name": "CONTAINER_DNS", "value": "${container_dns}"},
+        {"name": "CONTAINER_DNS_ZONE", "value": "${container_dns_zone}"},
+        {"name": "WORDPRESS_ADMIN_USER", "value": "${wordpress_admin_user}"},
+        {"name": "WORDPRESS_ADMIN_PASSWORD", "value": "${wordpress_admin_password}"},
+        {"name": "WORDPRESS_ADMIN_EMAIL", "value": "${wordpress_admin_email}"}
+    ],
+    "essential": true,
+    "image": "${wordpress_image}",
+    "memory": tonumber(container_memory),
+    "name": "wordpress",
+    "portMappings": [
+        {
+            "containerPort": 80,
+            "hostPort": 80,
+            "protocol": "tcp"
+        }
+    ],
+    "mountPoints" : [
+        {
+            "sourceVolume": "${efs_source_volume}",
+            "containerPath": "/var/www/html",
+            "readOnly": false
+        }
+    ],
+    "volumesFrom" : [],
+    "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/aws/ecs/${site_name}-serverless-wordpress-container",
+          "awslogs-region": "${wp_region}",
+          "awslogs-stream-prefix": "ecs"
+        }
+      }
+      })}
+
+]
