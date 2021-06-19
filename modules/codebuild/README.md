@@ -7,7 +7,7 @@ This module sets up the build to take a vanilla Wordpress image and bake customi
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_aws_account_id"></a> [aws\_account\_id](#input\_aws\_account\_id) | The AWS account ID into which resources will be launched. | `number` | n/a | yes |
+| <a name="input_aws_account_id"></a> [aws\_account\_id](#input\_aws\_account\_id) | The AWS account ID into which resources will be launched. | `string` | n/a | yes |
 | <a name="input_codebuild_bucket"></a> [codebuild\_bucket](#input\_codebuild\_bucket) | The name of the bucket used for codebuild of the image. | `string` | n/a | yes |
 | <a name="input_container_memory"></a> [container\_memory](#input\_container\_memory) | The memory allocated to the container (in MB) | `number` | n/a | yes |
 | <a name="input_main_vpc_id"></a> [main\_vpc\_id](#input\_main\_vpc\_id) | The VPC ID into which to launch resources. | `string` | n/a | yes |
