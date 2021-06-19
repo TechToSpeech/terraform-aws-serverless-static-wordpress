@@ -161,7 +161,7 @@ resource "null_resource" "update_nameservers" {
 ```
 See [examples](docs/examples) for full set-up example.
 
-## Launching container, customise Wordpress and publish static site
+## Launching container, customize Wordpress and publish static site
 
 Check that the CodeBuild job for the container has built successfully.
 
@@ -185,7 +185,7 @@ Enable the Add-on.
 The configuration of the plugin has been set up such that no additional configuration is required unless you wish to
 change any options.
 
-You may now edit Wordpress as you would normally, customise your site as you like, and when ready proceed to the 'Run'
+You may now edit Wordpress as you would normally, customize your site as you like, and when ready proceed to the 'Run'
 section of the WP2Static plugin, and click the 'Generate Static Site' button. This will take some minutes depending on
 the size of your site. When complete the site will be published in S3, and available via the public URL configured
 in your module definition.
