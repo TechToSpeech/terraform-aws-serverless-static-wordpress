@@ -61,10 +61,7 @@ resource "null_resource" "trigger_build" {
     codebuild_etag = module.peterdotcloud_website.codebuild_package_etag
   }
   provisioner "local-exec" {
-    command = <<-EOT
-    aws codebuild start-build --project-name "${module.peterdotcloud_website.codebuild_project_name}"
-    --profile "${local.profile}" --region "${local.aws_region}"
-    EOT
+    command = "aws codebuild start-build --project-name ${module.peterdotcloud_website.codebuild_project_name} --profile ${local.profile} --region ${local.aws_region}"
   }
   depends_on = [
     module.peterdotcloud_website, module.docker_pullpush
@@ -83,11 +80,7 @@ resource "null_resource" "update_nameservers" {
     nameservers = aws_route53_zone.apex.id
   }
   provisioner "local-exec" {
-    command = <<-EOT
-    aws route53domains update-domain-nameservers --region us-east-1 --domain-name "${local.site_domain}"
-    --nameservers Name="${aws_route53_zone.apex.name_servers.0}" Name="${aws_route53_zone.apex.name_servers.1}"
-        Name="${aws_route53_zone.apex.name_servers.2}" Name="${aws_route53_zone.apex.name_servers.3}" --profile peterdotcloud
-    EOT
+    command = "aws route53domains update-domain-nameservers --region us-east-1 --domain-name ${local.site_domain} --nameservers Name=${aws_route53_zone.apex.name_servers.0}Name=${aws_route53_zone.apex.name_servers.1} Name=${aws_route53_zone.apex.name_servers.2} Name=${aws_route53_zone.apex.name_servers.3} --profile peterdotcloud"
   }
   depends_on = [aws_route53_zone.apex]
 }
