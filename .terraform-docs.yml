@@ -1,0 +1,48 @@
+---
+version: ""
+
+formatter: <FORMATTER_NAME>
+
+header-from: .header.md
+footer-from: ""
+
+sections:
+  hide: []
+  show: []
+
+content: |-
+  {{ .Header }}
+  {{ .Footer }}
+  {{ .Inputs }}
+  {{ .Modules }}
+  {{ .Outputs }}
+  {{ .Requirements }}
+  {{ .Resources }}
+
+output:
+  file: ""
+  mode: inject
+  template: |-
+    <!-- BEGIN_TF_DOCS -->
+    {{ .Content }}
+    <!-- END_TF_DOCS -->
+
+output-values:
+  enabled: false
+  from: ""
+
+sort:
+  enabled: true
+  by: name
+
+settings:
+  anchor: true
+  color: true
+  default: true
+  description: false
+  escape: true
+  html: true
+  indent: 2
+  required: true
+  sensitive: true
+  type: true
