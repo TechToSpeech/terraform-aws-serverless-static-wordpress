@@ -161,11 +161,56 @@ resource "null_resource" "update_nameservers" {
 ```
 See [examples](docs/examples) for full set-up example.
 
+## Launching container, customize Wordpress and publish static site
+
+Check that the CodeBuild job for the container has built successfully.
+
+Toggle the `launch` value of the module to 1, and re-run Terraform plan/apply, which will launch the instance of the
+Wordpress management container.
+
+First-time launch of container will take 5-6 minutes as the installation of Wordpress completes. You can
+check status if you wish in CloudWatch log groups for ECS. It will come up within a few seconds on subsequent launches.
+
+The Wordpress management container will become available at http://wordpress.yourdomain.com (note HTTP, not HTTPS) by
+default, unless you specified your own `wordpress_subdomain` prefix.
+
+Default admin is: supervisor
+Default password: techtospeech.com
+
+Change these on first log in or specify your own in module instantiation.
+
+You will find WP2Static with S3 Add-on installed. Go to the WP2Static Menu->Addons, and click the 'Disabled' button to
+Enable the Add-on.
+
+The configuration of the plugin has been set up such that no additional configuration is required unless you wish to
+change any options.
+
+You may now edit Wordpress as you would normally, customize your site as you like, and when ready proceed to the 'Run'
+section of the WP2Static plugin, and click the 'Generate Static Site' button. This will take some minutes depending on
+the size of your site. When complete the site will be published in S3, and available via the public URL configured
+in your module definition.
+
+Gentle reminder that no backup options are currently bundled with this module - the most effective means would be to
+generate and retain a backup from within Wordpress for maximum flexibility. We recommend the UpdraftPlus plugin.
+
+## Troubleshooting
+
+If you experience issues with the publish element of WP2Static, you can retry. It can be more reliable to proceed to
+'Caches' section and select to delete all caches. Currently you need to additionally delete the S3 deploy cache manually.
+
+You should also try increasing the CPU/Memory allocated to the container. Undersizing the container can cause timeout
+issues that are currently not well handled in the plugin.
+
+If the job fails immediately and your site has previously generated a sitemaps.xml file, ensure you restore the plugin
+that generates this file and the crawl job can fail fast if it cannot locate it. For all other features and issues
+relating to WP2Static, [raise an issue on their repo](https://github.com/leonstafford/wp2static/issues).
+For any issues relating to this module, [raise an issue against this repo.](https://github.com/TechToSpeech/terraform-aws-serverless-static-wordpress/issues)
+
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_aws_account_id"></a> [aws\_account\_id](#input\_aws\_account\_id) | The AWS account ID into which resources will be launched. | `number` | n/a | yes |
+| <a name="input_aws_account_id"></a> [aws\_account\_id](#input\_aws\_account\_id) | The AWS account ID into which resources will be launched. | `string` | n/a | yes |
 | <a name="input_cloudfront_aliases"></a> [cloudfront\_aliases](#input\_cloudfront\_aliases) | The domain and sub-domain aliases to use for the cloudfront distribution. | `list(any)` | `[]` | no |
 | <a name="input_cloudfront_class"></a> [cloudfront\_class](#input\_cloudfront\_class) | The [price class](https://aws.amazon.com/cloudfront/pricing/) for the distribution. One of: PriceClass\_All, PriceClass\_200, PriceClass\_100 | `string` | `"PriceClass_All"` | no |
 | <a name="input_ecs_cpu"></a> [ecs\_cpu](#input\_ecs\_cpu) | The CPU limit password to the Wordpress container definition. | `number` | `256` | no |

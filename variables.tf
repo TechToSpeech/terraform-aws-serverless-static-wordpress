@@ -13,7 +13,7 @@ variable "subnet_ids" {
 }
 
 variable "aws_account_id" {
-  type        = number
+  type        = string
   description = "The AWS account ID into which resources will be launched."
 }
 
