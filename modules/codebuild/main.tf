@@ -59,7 +59,7 @@ resource "aws_s3_bucket_object" "wordpress_dockerbuild" {
   bucket = aws_s3_bucket.code_source.id
   key    = "wordpress_docker.zip"
   source = "${path.module}/codebuild_files/wordpress_docker.zip"
-  etag   = filemd5("${path.module}/codebuild_files/wordpress_docker.zip")
+  etag   = data.archive_file.code_build_package.output_md5
 }
 
 resource "aws_security_group" "codebuild_security_group" {
