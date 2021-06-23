@@ -37,6 +37,8 @@ pre-configured in line with industry best practices and highly efficient running
     - China (Beijing)
     - China (Ningxia)
 
+Alternatives for Aurora Serverless will be supported in a future release.
+
 ## Provider Set-up
 
 Terraform best practice is to configure providers at the top-level module and pass them downwards through implicit
