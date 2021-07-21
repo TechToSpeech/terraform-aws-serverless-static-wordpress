@@ -14,15 +14,15 @@ module "peterdotcloud_vpc" {
 module "peterdotcloud_website" {
   source         = "TechToSpeech/serverless-static-wordpress/aws"
   version        = "0.1.2"
-  main_vpc_id    = "vpc-e121c09b"
-  subnet_ids     = ["subnet-04b97235", "subnet-08fb235", "subnet-04b97734"]
+  main_vpc_id    = module.peterdotcloud_vpc.main_vpc_id
+  subnet_ids     = tolist(module.peterdotcloud_vpc.subnet_ids)
   aws_account_id = data.aws_caller_identity.current.account_id
 
   # site_name will be used to prepend resource names - use no spaces or special characters
   site_name           = local.site_name
   site_domain         = local.site_domain
   wordpress_subdomain = "wordpress"
-  hosted_zone_id      = "Z00437553UWAVIRHANGCN"
+  hosted_zone_id      = aws_route53_zone.apex.id
   s3_region           = local.aws_region
   slack_webhook       = "https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX"
   ecs_cpu             = 1024
@@ -47,7 +47,7 @@ module "docker_pullpush" {
   aws_account_id = data.aws_caller_identity.current.account_id
   aws_region     = local.aws_region
   docker_source  = "wordpress:php7.4-apache"
-  aws_profile    = "peterdotcloud"
+  aws_profile    = local.profile
   ecr_repo_name  = module.peterdotcloud_website.wordpress_ecr_repository
   ecr_repo_tag   = "base"
   depends_on     = [module.peterdotcloud_website]
@@ -80,7 +80,7 @@ resource "null_resource" "update_nameservers" {
     nameservers = aws_route53_zone.apex.id
   }
   provisioner "local-exec" {
-    command = "aws route53domains update-domain-nameservers --region us-east-1 --domain-name ${local.site_domain} --nameservers Name=${aws_route53_zone.apex.name_servers.0} Name=${aws_route53_zone.apex.name_servers.1} Name=${aws_route53_zone.apex.name_servers.2} Name=${aws_route53_zone.apex.name_servers.3} --profile peterdotcloud"
+    command = "aws route53domains update-domain-nameservers --region us-east-1 --domain-name ${local.site_domain} --nameservers Name=${aws_route53_zone.apex.name_servers.0} Name=${aws_route53_zone.apex.name_servers.1} Name=${aws_route53_zone.apex.name_servers.2} Name=${aws_route53_zone.apex.name_servers.3} --profile ${local.profile}"
   }
   depends_on = [aws_route53_zone.apex]
 }
