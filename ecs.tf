@@ -236,7 +236,12 @@ resource "aws_ecs_service" "wordpress_service" {
 # TODO: Add option to enable container insights
 #tfsec:ignore:AWS090
 resource "aws_ecs_cluster" "wordpress_cluster" {
-  name               = "${var.site_name}_wordpress"
+  name = "${var.site_name}_wordpress"
+
+}
+
+resource "aws_ecs_cluster_capacity_providers" "wordpress_cluster" {
+  cluster_name       = aws_ecs_cluster.wordpress_cluster.name
   capacity_providers = ["FARGATE_SPOT"]
   default_capacity_provider_strategy {
     capacity_provider = "FARGATE_SPOT"

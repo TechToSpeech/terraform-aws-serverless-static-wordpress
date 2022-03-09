@@ -48,11 +48,11 @@ As such you should include the following in your provider configuration:
 
 ```
 terraform {
-  required_version = "> 0.15.1"
+  required_version = "> 1.0"
   required_providers {
     aws = {
       source                = "hashicorp/aws"
-      version               = "~> 3.0"
+      version               = "~> 4.0"
       configuration_aliases = [aws.ue1]
     }
   }
@@ -66,6 +66,9 @@ provider "aws" {
 ```
 
 The `ue1` alias is essential for this module to work correctly.
+
+## Severless Static Wordpress V2 Upgrade Guide
+See [UPGRADING](docs/UPGRADING.md) for Version 2 upgrade guidance, including for Version 4 of the AWS Terraform Provider.
 
 ## Module instantiation example
 
@@ -265,8 +268,8 @@ For any issues relating to this module, [raise an issue against this repo.](http
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 0.15.1 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 3.0 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 4.0 |
 | <a name="requirement_random"></a> [random](#requirement\_random) | ~> 3.1.0 |
 ## Resources
 
@@ -279,6 +282,7 @@ For any issues relating to this module, [raise an issue against this repo.](http
 | [aws_db_subnet_group.main_vpc](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_subnet_group) | resource |
 | [aws_ecr_repository.serverless_wordpress](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecr_repository) | resource |
 | [aws_ecs_cluster.wordpress_cluster](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecs_cluster) | resource |
+| [aws_ecs_cluster_capacity_providers.wordpress_cluster](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecs_cluster_capacity_providers) | resource |
 | [aws_ecs_service.wordpress_service](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecs_service) | resource |
 | [aws_ecs_task_definition.wordpress_container](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecs_task_definition) | resource |
 | [aws_efs_access_point.wordpress_efs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/efs_access_point) | resource |

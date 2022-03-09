@@ -1,14 +1,16 @@
 # TODO: Add optional logging for S3 bucket
 # TODO: Add optional versioning for S3 bucket
-#tfsec:ignore:AWS002 #tfsec:ignore:AWS077
+#tfsec:ignore:AWS002 #tfsec:ignore:AWS017 #tfsec:ignore:AWS077
 resource "aws_s3_bucket" "wordpress_bucket" {
   bucket        = "${var.site_prefix}.${var.site_domain}"
   force_destroy = true
-  server_side_encryption_configuration {
-    rule {
-      apply_server_side_encryption_by_default {
-        sse_algorithm = "AES256"
-      }
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "wordpress_bucket" {
+  bucket = aws_s3_bucket.wordpress_bucket.bucket
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
     }
   }
 }
