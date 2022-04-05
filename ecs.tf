@@ -1,10 +1,3 @@
-locals {
-  graviton_fargate_regions_unsupported = [
-    "af-south-1",
-    "me-south-1"
-  ]
-}
-
 data "aws_region" "current" {}
 
 resource "aws_efs_file_system" "wordpress_persistent" {
@@ -134,7 +127,7 @@ resource "aws_ecs_task_definition" "wordpress_container" {
 
   runtime_platform {
     operating_system_family = "LINUX"
-    cpu_architecture        = contains(local.graviton_fargate_regions_unsupported, data.aws_region.current.name) ? "X86_64" : "ARM64"
+    cpu_architecture        = var.graviton_fargate_enabled ? (contains(local.graviton_fargate_regions_unsupported, data.aws_region.current) ? "X86_64" : "ARM64") : "X86_64"
   }
 
   cpu                      = var.ecs_cpu
@@ -232,7 +225,7 @@ resource "aws_ecs_service" "wordpress_service" {
   desired_count   = var.launch
   # iam_role =
   capacity_provider_strategy {
-    capacity_provider = "FARGATE_SPOT"
+    capacity_provider = var.graviton_fargate_enabled ? (contains(local.graviton_fargate_regions_unsupported, data.aws_region.current) ? "FARGATE_SPOT" : "FARGATE") : "FARGATE"
     weight            = "100"
     base              = "1"
   }
@@ -251,14 +244,13 @@ resource "aws_ecs_service" "wordpress_service" {
 #tfsec:ignore:AWS090
 resource "aws_ecs_cluster" "wordpress_cluster" {
   name = "${var.site_name}_wordpress"
-
 }
 
 resource "aws_ecs_cluster_capacity_providers" "wordpress_cluster" {
   cluster_name       = aws_ecs_cluster.wordpress_cluster.name
-  capacity_providers = ["FARGATE_SPOT"]
+  capacity_providers = [var.graviton_fargate_enabled ? (contains(local.graviton_fargate_regions_unsupported, data.aws_region.current) ? "FARGATE_SPOT" : "FARGATE") : "FARGATE"]
   default_capacity_provider_strategy {
-    capacity_provider = "FARGATE_SPOT"
+    capacity_provider = var.graviton_fargate_enabled ? (contains(local.graviton_fargate_regions_unsupported, data.aws_region.current) ? "FARGATE_SPOT" : "FARGATE") : "FARGATE"
     weight            = "100"
     base              = "1"
   }

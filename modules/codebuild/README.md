@@ -10,6 +10,7 @@ This module sets up the build to take a vanilla Wordpress image and bake customi
 | <a name="input_aws_account_id"></a> [aws\_account\_id](#input\_aws\_account\_id) | The AWS account ID into which resources will be launched. | `string` | n/a | yes |
 | <a name="input_codebuild_bucket"></a> [codebuild\_bucket](#input\_codebuild\_bucket) | The name of the bucket used for codebuild of the image. | `string` | n/a | yes |
 | <a name="input_container_memory"></a> [container\_memory](#input\_container\_memory) | The memory allocated to the container (in MB) | `number` | n/a | yes |
+| <a name="input_graviton_codebuild_enabled"></a> [graviton\_codebuild\_enabled](#input\_graviton\_codebuild\_enabled) | Flag that controls whether CodeBuild should use Graviton-based build agents in [supported regions](https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-compute-types.html). | `bool` | `false` | no |
 | <a name="input_main_vpc_id"></a> [main\_vpc\_id](#input\_main\_vpc\_id) | The VPC ID into which to launch resources. | `string` | n/a | yes |
 | <a name="input_site_domain"></a> [site\_domain](#input\_site\_domain) | The site domain name to configure (without any subdomains such as 'www') | `string` | n/a | yes |
 | <a name="input_site_name"></a> [site\_name](#input\_site\_name) | The unique name for this instance of the module. Required to deploy multiple wordpress instances to the same AWS account (if desired). | `string` | n/a | yes |

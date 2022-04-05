@@ -1,3 +1,10 @@
+locals {
+  graviton_fargate_regions_unsupported = [
+    "af-south-1",
+    "me-south-1"
+  ]
+}
+
 variable "main_vpc_id" {
   type        = string
   description = "The VPC ID into which to launch resources."
@@ -165,4 +172,16 @@ variable "waf_acl_rules" {
       sampled_requests_enabled   = true
     }
   ]
+}
+
+variable "graviton_codebuild_enabled" {
+  type        = bool
+  default     = false
+  description = "Flag that controls whether CodeBuild should use Graviton-based build agents in [supported regions](https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-compute-types.html)."
+}
+
+variable "graviton_fargate_enabled" {
+  type        = bool
+  default     = false
+  description = "Flag that controls whether ECS Fargate should use Graviton-based containers in [supported regions]https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate-Regions.html)."
 }

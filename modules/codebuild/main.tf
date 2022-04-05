@@ -1,25 +1,5 @@
 data "aws_region" "current" {}
 
-locals {
-  # https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-compute-types.html
-  # Regions supporting Graviton for CodeBuild
-  arm_container_regions = [
-    "us-east-2",
-    "us-east-1",
-    "us-west-1",
-    "us-west-2",
-    "ap-south-1",
-    "ap-southeast-1",
-    "ap-southeast-2",
-    "ap-northeast-1",
-    "ap-northeast-2",
-    "ca-central-1",
-    "eu-west-1",
-    "eu-west-2",
-    "eu-west-3",
-    "eu-central-1"
-  ]
-}
 # TODO: Add optional logging for S3 bucket
 # TODO: Add optional versioning for S3 bucket
 #tfsec:ignore:AWS002 #tfsec:ignore:AWS017 #tfsec:ignore:AWS077
@@ -127,9 +107,9 @@ resource "aws_codebuild_project" "wordpress_docker_build" {
 
   environment {
     compute_type = "BUILD_GENERAL1_SMALL"
-    image        = contains(local.arm_container_regions, data.aws_region.current.name) ? "aws/codebuild/amazonlinux2-aarch64-standard:2.0" : "aws/codebuild/amazonlinux2-x86_64-standard:3.0"
+    image        = var.graviton_codebuild_enabled ? "aws/codebuild/amazonlinux2-aarch64-standard:2.0" : "aws/codebuild/amazonlinux2-x86_64-standard:3.0"
     # Use ARM for codebuild if in supporting region
-    type                        = contains(local.arm_container_regions, data.aws_region.current.name) ? "ARM_CONTAINER" : "LINUX_CONTAINER"
+    type                        = var.graviton_codebuild_enabled ? (contains(local.arm_container_regions, data.aws_region.current.name) ? "ARM_CONTAINER" : "LINUX_CONTAINER") : "LINUX_CONTAINER"
     image_pull_credentials_type = "CODEBUILD"
     privileged_mode             = true
 
