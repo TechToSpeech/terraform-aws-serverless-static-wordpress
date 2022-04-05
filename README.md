@@ -48,11 +48,11 @@ As such you should include the following in your provider configuration:
 
 ```
 terraform {
-  required_version = "> 0.15.1"
+  required_version = "> 1.0"
   required_providers {
     aws = {
       source                = "hashicorp/aws"
-      version               = "~> 3.0"
+      version               = "~> 4.0"
       configuration_aliases = [aws.ue1]
     }
   }
@@ -66,6 +66,9 @@ provider "aws" {
 ```
 
 The `ue1` alias is essential for this module to work correctly.
+
+## Severless Static Wordpress V2 Upgrade Guide
+See [UPGRADING](docs/UPGRADING.md) for Version 2 upgrade guidance, including for Version 4 of the AWS Terraform Provider.
 
 ## Module instantiation example
 
@@ -229,6 +232,8 @@ For any issues relating to this module, [raise an issue against this repo.](http
 | <a name="input_cloudfront_class"></a> [cloudfront\_class](#input\_cloudfront\_class) | The [price class](https://aws.amazon.com/cloudfront/pricing/) for the distribution. One of: PriceClass\_All, PriceClass\_200, PriceClass\_100 | `string` | `"PriceClass_All"` | no |
 | <a name="input_ecs_cpu"></a> [ecs\_cpu](#input\_ecs\_cpu) | The CPU limit password to the Wordpress container definition. | `number` | `256` | no |
 | <a name="input_ecs_memory"></a> [ecs\_memory](#input\_ecs\_memory) | The memory limit password to the Wordpress container definition. | `number` | `512` | no |
+| <a name="input_graviton_codebuild_enabled"></a> [graviton\_codebuild\_enabled](#input\_graviton\_codebuild\_enabled) | Flag that controls whether CodeBuild should use Graviton-based build agents in [supported regions](https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-compute-types.html). | `bool` | `false` | no |
+| <a name="input_graviton_fargate_enabled"></a> [graviton\_fargate\_enabled](#input\_graviton\_fargate\_enabled) | Flag that controls whether ECS Fargate should use Graviton-based containers in [supported regions]https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate-Regions.html). | `bool` | `false` | no |
 | <a name="input_hosted_zone_id"></a> [hosted\_zone\_id](#input\_hosted\_zone\_id) | The Route53 HostedZone ID to use to create records in. | `string` | n/a | yes |
 | <a name="input_launch"></a> [launch](#input\_launch) | The number of tasks to launch of the Wordpress container. Used as a toggle to start/stop your Wordpress management session. | `number` | `"0"` | no |
 | <a name="input_main_vpc_id"></a> [main\_vpc\_id](#input\_main\_vpc\_id) | The VPC ID into which to launch resources. | `string` | n/a | yes |
@@ -265,8 +270,8 @@ For any issues relating to this module, [raise an issue against this repo.](http
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 0.15.1 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 3.0 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.1.7 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 4.0 |
 | <a name="requirement_random"></a> [random](#requirement\_random) | ~> 3.1.0 |
 ## Resources
 
@@ -279,6 +284,7 @@ For any issues relating to this module, [raise an issue against this repo.](http
 | [aws_db_subnet_group.main_vpc](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_subnet_group) | resource |
 | [aws_ecr_repository.serverless_wordpress](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecr_repository) | resource |
 | [aws_ecs_cluster.wordpress_cluster](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecs_cluster) | resource |
+| [aws_ecs_cluster_capacity_providers.wordpress_cluster](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecs_cluster_capacity_providers) | resource |
 | [aws_ecs_service.wordpress_service](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecs_service) | resource |
 | [aws_ecs_task_definition.wordpress_container](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecs_task_definition) | resource |
 | [aws_efs_access_point.wordpress_efs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/efs_access_point) | resource |
@@ -307,4 +313,5 @@ For any issues relating to this module, [raise an issue against this repo.](http
 | [random_password.serverless_wordpress_password](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/password) | resource |
 | [aws_iam_policy_document.ecs_assume_role_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.wordpress_bucket_access](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
+| [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) | data source |
 <!-- END_TF_DOCS -->

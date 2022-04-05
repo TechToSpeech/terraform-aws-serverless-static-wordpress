@@ -7,14 +7,15 @@ module "lambda_slack" {
 }
 
 module "codebuild" {
-  source                   = "./modules/codebuild"
-  site_name                = var.site_name
-  site_domain              = var.site_domain
-  codebuild_bucket         = "${var.site_name}-build"
-  main_vpc_id              = var.main_vpc_id
-  wordpress_ecr_repository = aws_ecr_repository.serverless_wordpress.name
-  aws_account_id           = var.aws_account_id
-  container_memory         = var.ecs_memory
+  source                     = "./modules/codebuild"
+  graviton_codebuild_enabled = var.graviton_codebuild_enabled
+  site_name                  = var.site_name
+  site_domain                = var.site_domain
+  codebuild_bucket           = "${var.site_name}-build"
+  main_vpc_id                = var.main_vpc_id
+  wordpress_ecr_repository   = aws_ecr_repository.serverless_wordpress.name
+  aws_account_id             = var.aws_account_id
+  container_memory           = var.ecs_memory
 }
 
 module "cloudfront" {
