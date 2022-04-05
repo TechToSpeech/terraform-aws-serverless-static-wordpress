@@ -140,6 +140,12 @@ variable "wordpress_admin_email" {
   default     = "admin@example.com"
 }
 
+variable "wordpress_memory_limit" {
+  type        = string
+  description = "The memory to allow the Wordpress process to use (in M)"
+  default     = "256M"
+}
+
 variable "waf_acl_rules" {
   type        = list(any)
   description = "List of WAF rules to apply. Can be customized to apply others created outside of module."

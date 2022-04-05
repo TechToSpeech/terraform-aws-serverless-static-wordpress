@@ -123,6 +123,7 @@ resource "aws_ecs_task_definition" "wordpress_container" {
     wordpress_admin_password = var.wordpress_admin_password
     wordpress_admin_email    = var.wordpress_admin_email
     site_name                = var.site_name
+    wordpress_memory_limit   = var.wordpress_memory_limit
   })
 
   runtime_platform {
@@ -225,7 +226,7 @@ resource "aws_ecs_service" "wordpress_service" {
   desired_count   = var.launch
   # iam_role =
   capacity_provider_strategy {
-    capacity_provider = var.graviton_fargate_enabled ? (contains(local.graviton_fargate_regions_unsupported, data.aws_region.current) ? "FARGATE_SPOT" : "FARGATE") : "FARGATE"
+    capacity_provider = var.graviton_fargate_enabled ? (contains(local.graviton_fargate_regions_unsupported, data.aws_region.current) ? "FARGATE_SPOT" : "FARGATE") : "FARGATE_SPOT"
     weight            = "100"
     base              = "1"
   }
@@ -248,9 +249,9 @@ resource "aws_ecs_cluster" "wordpress_cluster" {
 
 resource "aws_ecs_cluster_capacity_providers" "wordpress_cluster" {
   cluster_name       = aws_ecs_cluster.wordpress_cluster.name
-  capacity_providers = [var.graviton_fargate_enabled ? (contains(local.graviton_fargate_regions_unsupported, data.aws_region.current) ? "FARGATE_SPOT" : "FARGATE") : "FARGATE"]
+  capacity_providers = [var.graviton_fargate_enabled ? (contains(local.graviton_fargate_regions_unsupported, data.aws_region.current) ? "FARGATE_SPOT" : "FARGATE") : "FARGATE_SPOT"]
   default_capacity_provider_strategy {
-    capacity_provider = var.graviton_fargate_enabled ? (contains(local.graviton_fargate_regions_unsupported, data.aws_region.current) ? "FARGATE_SPOT" : "FARGATE") : "FARGATE"
+    capacity_provider = var.graviton_fargate_enabled ? (contains(local.graviton_fargate_regions_unsupported, data.aws_region.current) ? "FARGATE_SPOT" : "FARGATE") : "FARGATE_SPOT"
     weight            = "100"
     base              = "1"
   }

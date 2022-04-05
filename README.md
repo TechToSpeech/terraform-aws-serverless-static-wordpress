@@ -249,6 +249,7 @@ For any issues relating to this module, [raise an issue against this repo.](http
 | <a name="input_wordpress_admin_email"></a> [wordpress\_admin\_email](#input\_wordpress\_admin\_email) | The email address of the default wordpress admin user. | `string` | `"admin@example.com"` | no |
 | <a name="input_wordpress_admin_password"></a> [wordpress\_admin\_password](#input\_wordpress\_admin\_password) | The password of the default wordpress admin user. | `string` | `"techtospeech.com"` | no |
 | <a name="input_wordpress_admin_user"></a> [wordpress\_admin\_user](#input\_wordpress\_admin\_user) | The username of the default wordpress admin user. | `string` | `"supervisor"` | no |
+| <a name="input_wordpress_memory_limit"></a> [wordpress\_memory\_limit](#input\_wordpress\_memory\_limit) | The memory to allow the Wordpress process to use (in M) | `string` | `"256M"` | no |
 | <a name="input_wordpress_subdomain"></a> [wordpress\_subdomain](#input\_wordpress\_subdomain) | The subdomain used for the Wordpress container. | `string` | `"wordpress"` | no |
 ## Modules
 

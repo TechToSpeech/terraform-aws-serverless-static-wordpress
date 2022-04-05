@@ -318,6 +318,8 @@ fi
 if ! sudo -u www-data wp plugin is-installed wp2static-addon-s3; then
 	sudo -u www-data wp plugin install /tmp/serverless-wordpress-s3-addon.zip --activate --path=/var/www/html || true
 fi
+# Update WP_MEMORY_LIMIT
+sudo -u www-data wp config set WP_MEMORY_LIMIT ${WP_MEMORY_LIMIT}
 # # Update Wordpress options with IP of running container
 sudo -u www-data wp option update siteurl "http://${CONTAINER_DNS}" || true
 sudo -u www-data wp option update home "http://${CONTAINER_DNS}" || true
