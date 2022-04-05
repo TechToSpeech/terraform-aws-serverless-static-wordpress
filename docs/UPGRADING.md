@@ -1,6 +1,6 @@
-## Upgrading from 0.1.x to 2.x.x
+## Upgrading from 0.1.x to 0.2.x
 
-Version 2 of Serverless Static Wordpress makes numerous updates to the resources used to deploy the solution, as well
+Version 0.2 of Serverless Static Wordpress makes numerous updates to the resources used to deploy the solution, as well
 as expanding functionality with additional options.
 
 Where possible, this has been done in a way to be as backwards compatible as reasonably possible - however there are a
@@ -24,3 +24,8 @@ terraform import module.peterdotcloud_website.module.cloudfront.aws_s3_bucket_se
 terraform import module.peterdotcloud_website.module.codebuild.aws_s3_bucket_acl.code_source peterdotcloud-build
 terraform import module.peterdotcloud_website.module.codebuild.aws_s3_bucket_server_side_encryption_configuration.code_source peterdotcloud-build
 ```
+### General notes
+
+With support for ARM in CodeBuild, and in ECS in regions where it is supported (strictly better for cost/performance),
+the module will need to recreate your task definitions. This is nothing to be concerned with however you **must**
+ensure your base image of Wordpress is an arm64 platform version (and preferably linux/arm64/v8).

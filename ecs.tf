@@ -1,3 +1,12 @@
+locals {
+  graviton_fargate_regions_unsupported = [
+    "af-south-1",
+    "me-south-1"
+  ]
+}
+
+data "aws_region" "current" {}
+
 resource "aws_efs_file_system" "wordpress_persistent" {
   encrypted = true
   lifecycle_policy {
@@ -122,6 +131,11 @@ resource "aws_ecs_task_definition" "wordpress_container" {
     wordpress_admin_email    = var.wordpress_admin_email
     site_name                = var.site_name
   })
+
+  runtime_platform {
+    operating_system_family = "LINUX"
+    cpu_architecture        = contains(local.graviton_fargate_regions_unsupported, data.aws_region.current.name) ? "X86_64" : "ARM64"
+  }
 
   cpu                      = var.ecs_cpu
   memory                   = var.ecs_memory
