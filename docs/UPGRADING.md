@@ -9,7 +9,7 @@ the configuration in AWS, or to the Terraform state backing the resources.
 
 ### Upgrading to Version 4 of the Terraform AWS Provider
 Version 4 of the AWS Provider introduced a few breaking changes to the way ECS and S3 resources are defined. Attributes
-that would normally be specified as part of the single resource definition, have now been split out into their own
+that would normally be specified as part of the single resource definition have now been split out into their own
 resources. To cope with this, we have created these resources, and _existing_ resources can be handled with some
 terraform state operations. To date, these are documented as follows.
 
@@ -24,8 +24,13 @@ terraform import module.peterdotcloud_website.module.cloudfront.aws_s3_bucket_se
 terraform import module.peterdotcloud_website.module.codebuild.aws_s3_bucket_acl.code_source peterdotcloud-build
 terraform import module.peterdotcloud_website.module.codebuild.aws_s3_bucket_server_side_encryption_configuration.code_source peterdotcloud-build
 ```
-### General notes
+### Graviton
 
 With support for ARM in CodeBuild, and in ECS in regions where it is supported (strictly better for cost/performance),
-the module will need to recreate your task definitions. This is nothing to be concerned with however you **must**
-ensure your base image of Wordpress is an arm64 platform version (and preferably linux/arm64/v8).
+the module will need to recreate your task definition and ECS service. This is nothing to be concerned with however you
+ **must** ensure your base image of Wordpress is an arm64 platform version (and preferably linux/arm64/v8) otherwise
+ your Wordpress container will error out with `exec user process caused: exec format error` which indicates your image
+ is of the mismatched architecture.
+
+ Note that when using Graviton-based containers for ECS, FARGATE_SPOT is not currently available (bear this in mind for
+ cost).
