@@ -270,7 +270,7 @@ For any issues relating to this module, [raise an issue against this repo.](http
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.1.7 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 4.0 |
 | <a name="requirement_random"></a> [random](#requirement\_random) | ~> 3.1.0 |
 ## Resources
