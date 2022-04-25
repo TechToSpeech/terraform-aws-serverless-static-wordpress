@@ -9,9 +9,9 @@ jobs:
   tflint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2.3.4
+      - uses: actions/checkout@v3.0.2
       - name: setup Terraform
-        uses: hashicorp/setup-terraform@v1.3.2
+        uses: hashicorp/setup-terraform@v2.0.0
         with:
           terraform_version: 1.1.7
       - name: Terraform init
@@ -27,9 +27,9 @@ jobs:
   tfsec:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2.3.4
+      - uses: actions/checkout@v3.0.2
       - name: setup Terraform
-        uses: hashicorp/setup-terraform@v1.3.2
+        uses: hashicorp/setup-terraform@v2.0.0
         with:
           terraform_version: 1.1.7
       - name: Terraform init
@@ -44,9 +44,9 @@ jobs:
   misspell:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2.3.4
+      - uses: actions/checkout@v3.0.2
       - name: misspell
-        uses: reviewdog/action-misspell@v1.11.0
+        uses: reviewdog/action-misspell@v1.12.0
         with:
           github_token: ${{ secrets.ACTIONS_TOKEN }}
           locale: "UK"
@@ -56,9 +56,9 @@ jobs:
   yamllint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2.3.4
+      - uses: actions/checkout@v3.0.2
       - name: yamllint
-        uses: reviewdog/action-yamllint@v1.2.0
+        uses: reviewdog/action-yamllint@v1.6.0
         with:
           github_token: ${{ secrets.ACTIONS_TOKEN }}
           reporter: github-check
