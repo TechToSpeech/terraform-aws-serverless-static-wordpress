@@ -1,25 +1,34 @@
+resource "local_file" "rules" {
+  content   = jsonencode(var.rewrite_rules)
+  filename = "${path.module}/lambda_rewrite/rules.json"
+}
+
 data "archive_file" "index_html" {
+  depends_on = [
+    local_file.rules
+  ]
+
   type        = "zip"
-  source_dir  = "${path.module}/lambda_redirect/index_html"
-  output_path = "${path.module}/lambda_redirect/dst/index_html.zip"
+  source_dir  = "${path.module}/lambda_rewrite"
+  output_path = "${path.module}/lambda_rewrite/dst/rewrite.zip"
 }
 
 #tfsec:ignore:AWS089
 resource "aws_cloudwatch_log_group" "object_redirect" {
-  name              = "/aws/lambda/${var.site_name}_redirect_index_html"
+  name              = "/aws/lambda/${var.site_name}_rewrite"
   retention_in_days = 7
 }
 
 #tfsec:ignore:AWS089
 resource "aws_cloudwatch_log_group" "object_redirect_ue1_local" {
-  name              = "/aws/lambda/us-east-1.${var.site_name}_redirect_index_html"
+  name              = "/aws/lambda/us-east-1.${var.site_name}_rewrite"
   retention_in_days = 7
 }
 
 # TODO: A solution to create/manage default log groups in all Edge Cache Regions
 #tfsec:ignore:AWS089
 resource "aws_cloudwatch_log_group" "object_redirect_ue1" {
-  name              = "/aws/lambda/us-east-1.${var.site_name}_redirect_index_html"
+  name              = "/aws/lambda/us-east-1.${var.site_name}_rewrite"
   retention_in_days = 7
   provider          = aws.ue1
 }
@@ -27,7 +36,7 @@ resource "aws_cloudwatch_log_group" "object_redirect_ue1" {
 resource "aws_lambda_function" "object_redirect" {
   provider         = aws.ue1
   filename         = data.archive_file.index_html.output_path
-  function_name    = "${var.site_name}_redirect_index_html"
+  function_name    = "${var.site_name}_rewrite"
   role             = aws_iam_role.lambda-edge.arn
   handler          = "index.handler"
   source_code_hash = data.archive_file.index_html.output_base64sha256

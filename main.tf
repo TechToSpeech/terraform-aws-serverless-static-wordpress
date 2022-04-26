@@ -31,6 +31,7 @@ module "cloudfront" {
   module.waf]
   cloudfront_class = var.cloudfront_class
   waf_acl_arn      = var.waf_enabled ? module.waf[0].waf_acl_arn : null
+  rewrite_rules    = var.rewrite_rules
 }
 
 module "waf" {

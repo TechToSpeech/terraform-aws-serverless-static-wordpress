@@ -36,3 +36,12 @@ variable "waf_acl_arn" {
   default     = null
   description = "The ARN of the WAF ACL applied to the CloudFront distribution."
 }
+
+variable "rewrite_rules" {
+  type    = list(string)
+  default = [ 
+    "^(.*)/$ $1/index.html [L]",
+    "^(.*)/index.php$ '$1/index.html' [L]"
+  ]
+  description = "Rewrite / Redirect rules for the Cloudfront Lambda."
+}

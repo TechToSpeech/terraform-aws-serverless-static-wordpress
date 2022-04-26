@@ -104,6 +104,15 @@ variable "cloudfront_class" {
   default     = "PriceClass_All"
 }
 
+variable "rewrite_rules" {
+  type    = list(string)
+  default = [ 
+    "^(.*)/$ $1/index.html [L]",
+    "^(.*)/index.php$ '$1/index.html' [L]"
+  ]
+  description = "Rewrite / Redirect rules for the Cloudfront Lambda."
+}
+
 variable "hosted_zone_id" {
   type        = string
   description = "The Route53 HostedZone ID to use to create records in."
