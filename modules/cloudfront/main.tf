@@ -8,6 +8,10 @@ resource "aws_cloudwatch_log_group" "object_rewrite" {
 }
 
 resource "aws_cloudfront_function" "object_rewrite" {
+  depends_on = [
+    aws_cloudwatch_log_group.object_rewrite
+  ]
+  
   name    = "${var.site_name}_rewrite"
   runtime = "cloudfront-js-1.0"
   publish = true
