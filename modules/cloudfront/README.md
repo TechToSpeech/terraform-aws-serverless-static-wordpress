@@ -9,7 +9,7 @@ This module sets up the CloudFront distribution that fronts the static wordpress
 |------|-------------|------|---------|:--------:|
 | <a name="input_cloudfront_aliases"></a> [cloudfront\_aliases](#input\_cloudfront\_aliases) | The domain and sub-domain aliases to use for the cloudfront distribution. | `list(any)` | `[]` | no |
 | <a name="input_cloudfront_class"></a> [cloudfront\_class](#input\_cloudfront\_class) | The [price class](https://aws.amazon.com/cloudfront/pricing/) for the distribution. One of: PriceClass\_All, PriceClass\_200, PriceClass\_100 | `string` | `"PriceClass_All"` | no |
-| <a name="input_cloudfront_function_301_redirects"></a> [cloudfront\_function\_301\_redirects](#input\_cloudfront\_function\_301\_redirects) | A list of key value pairs of Regex match and destination for 301 redirects at CloudFront. | `map` | <pre>{<br>  "^(.*)index\\.php$": "$1"<br>}</pre> | no |
+| <a name="input_cloudfront_function_301_redirects"></a> [cloudfront\_function\_301\_redirects](#input\_cloudfront\_function\_301\_redirects) | A list of key value pairs of Regex match and destination for 301 redirects at CloudFront. | `map(any)` | <pre>{<br>  "^(.*)index\\.php$": "$1"<br>}</pre> | no |
 | <a name="input_cloudfront_ssl"></a> [cloudfront\_ssl](#input\_cloudfront\_ssl) | The ARN of the ACM certificate used for the CloudFront domain. | `string` | n/a | yes |
 | <a name="input_site_domain"></a> [site\_domain](#input\_site\_domain) | The site domain name to configure (without any subdomains such as 'www') | `string` | n/a | yes |
 | <a name="input_site_name"></a> [site\_name](#input\_site\_name) | The unique name for this instance of the module. Required to deploy multiple wordpress instances to the same AWS account (if desired). | `string` | n/a | yes |
