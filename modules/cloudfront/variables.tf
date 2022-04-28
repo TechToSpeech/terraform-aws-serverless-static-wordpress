@@ -36,3 +36,11 @@ variable "waf_acl_arn" {
   default     = null
   description = "The ARN of the WAF ACL applied to the CloudFront distribution."
 }
+
+variable "cloudfront_function_301_redirects" {
+  type        = map
+  default     = {
+    "^(.*)index\\.php$": "$1"
+  }
+  description = "A list of key value pairs of Regex match and destination for 301 redirects at CloudFront."
+}
