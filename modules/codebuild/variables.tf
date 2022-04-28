@@ -63,3 +63,15 @@ variable "graviton_codebuild_enabled" {
   default     = false
   description = "Flag that controls whether CodeBuild should use Graviton-based build agents in [supported regions](https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-compute-types.html)."
 }
+
+variable "wp2static_version" {
+  type        = string
+  description = "Version of WP2Static to use from https://github.com/leonstafford/wp2static/releases"
+  default     = "7.1.7"
+}
+
+variable "wp2static_s3_addon_version" {
+  type        = string
+  description = "Version of the WP2Static S3 Add-on to use from https://github.com/leonstafford/wp2static-addon-s3/releases/"
+  default     = "1.0"
+}

@@ -129,6 +129,14 @@ resource "aws_codebuild_project" "wordpress_docker_build" {
       name  = "IMAGE_TAG"
       value = "latest"
     }
+    environment_variable {
+      name  = "WP2STATIC_VERSION"
+      value = var.wp2static_version
+    }
+    environment_variable {
+      name  = "WP2STATIC_S3_ADDON_VERSION"
+      value = var.wp2static_s3_addon_version
+    }
   }
 
   logs_config {
