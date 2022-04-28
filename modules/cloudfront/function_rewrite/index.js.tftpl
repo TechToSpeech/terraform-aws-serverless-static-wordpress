@@ -2,7 +2,7 @@ function handler(event) {
     var request = event.request;
     var uri = request.uri; 
     
-    try {    
+    try {
         %{ for match, target in REDIRECTS }
         if (/${match}/.test(uri)) {
             return permanentRedirect(/${match}/, '${target}');
@@ -16,6 +16,7 @@ function handler(event) {
         }
     }
     catch (e) {
+        // console.error is not supported
         console.log(e);
     }
 
