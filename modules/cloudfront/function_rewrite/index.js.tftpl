@@ -1,7 +1,7 @@
 function handler(event) {
     var request = event.request;
-    var uri = request.uri; 
-    
+    var uri = request.uri;
+
     try {
         %{ for match, target in REDIRECTS }
         if (/${match}/.test(uri)) {
@@ -12,7 +12,7 @@ function handler(event) {
         // Check whether the URI is missing a file name.
         if (uri.endsWith('/')) {
             request.uri += 'index.html';
-            return request;        
+            return request;
         }
     }
     catch (e) {

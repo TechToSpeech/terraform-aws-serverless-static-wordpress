@@ -38,9 +38,9 @@ variable "waf_acl_arn" {
 }
 
 variable "cloudfront_function_301_redirects" {
-  type        = map
-  default     = {
-    "^(.*)index\\.php$": "$1"
+  type = map(any)
+  default = {
+    "^(.*)index\\.php$" : "$1"
   }
   description = "A list of key value pairs of Regex match and destination for 301 redirects at CloudFront."
 }
