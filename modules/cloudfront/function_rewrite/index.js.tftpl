@@ -3,15 +3,9 @@ function handler(event) {
     var uri = request.uri; 
     
     try {    
-        %{ for match, destination in REDIRECTS }
+        %{ for match, target in REDIRECTS }
         if (/${match}/.test(uri)) {
-            return {
-                statusCode: 301,
-                statusDescription: 'Moved Permanently',
-                headers: {
-                    'location': { value: uri.replace(/${match}/, '${destination}') }
-                }
-            };
+            return permanentRedirect(/${match}/, '${target}');
         }
         %{ endfor ~}
 
@@ -26,4 +20,14 @@ function handler(event) {
     }
 
     return request;
+}
+
+function permanentRedirect(match, target) {
+    return {
+        statusCode: 301,
+        statusDescription: 'Moved Permanently',
+        headers: {
+            'location': { value: uri.replace(match, target) }
+        }
+    };
 }
