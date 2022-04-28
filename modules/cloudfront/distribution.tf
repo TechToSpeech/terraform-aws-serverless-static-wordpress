@@ -61,9 +61,9 @@ resource "aws_cloudfront_distribution" "wordpress_distribution" {
       }
     }
 
-    lambda_function_association {
-      event_type = "origin-request"
-      lambda_arn = "${aws_lambda_function.object_redirect.arn}:${aws_lambda_function.object_redirect.version}"
+    function_association {
+      event_type   = "viewer-request"
+      function_arn = aws_cloudfront_function.object_rewrite.arn
     }
 
     viewer_protocol_policy = "redirect-to-https"

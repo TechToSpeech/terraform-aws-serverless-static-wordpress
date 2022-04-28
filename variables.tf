@@ -104,6 +104,14 @@ variable "cloudfront_class" {
   default     = "PriceClass_All"
 }
 
+variable "cloudfront_function_redirects" {
+  type        = map
+  default     = {
+    "^(.*)index\\.php$": "$1"
+  }
+  description = "A list of key value pairs of Regex match to destination for CloudFront to do 301 redirects."
+}
+
 variable "hosted_zone_id" {
   type        = string
   description = "The Route53 HostedZone ID to use to create records in."

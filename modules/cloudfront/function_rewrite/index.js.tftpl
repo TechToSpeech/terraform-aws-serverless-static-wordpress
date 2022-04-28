@@ -1,0 +1,29 @@
+function handler(event) {
+    var request = event.request;
+    var uri = request.uri; 
+    
+    try {    
+        %{ for match, destination in REDIRECTS }
+        if (/${match}/.test(uri)) {
+            return {
+                statusCode: 301,
+                statusDescription: 'Moved Permanently',
+                headers: {
+                    'location': { value: uri.replace(/${match}/, '${destination}') }
+                }
+            };
+        }
+        %{ endfor ~}
+
+        // Check whether the URI is missing a file name.
+        if (uri.endsWith('/')) {
+            request.uri += 'index.html';
+            return request;        
+        }
+    }
+    catch (e) {
+        console.log(e);
+    }
+
+    return request;
+}
