@@ -89,14 +89,14 @@ resource "aws_route_table" "main_private" {
 }
 
 resource "aws_route_table_association" "main_subnets_public" {
-  count          = length(data.aws_subnet_ids.main_public.ids)
-  subnet_id      = tolist(data.aws_subnet_ids.main_public.ids)[count.index]
+  count          = length(data.aws_subnet_ids.main_public) > 0 ? length(data.aws_subnet_ids.main_public) : 0
+  subnet_id      = element(aws_subnet.main_public.*.id, count.index)
   route_table_id = aws_route_table.main_public.id
 }
 
 resource "aws_route_table_association" "main_subnets_private" {
-  count          = length(data.aws_subnet_ids.main_private.ids)
-  subnet_id      = tolist(data.aws_subnet_ids.main_private.ids)[count.index]
+  count          = length(data.aws_subnet_ids.main_private) > 0 ? length(data.aws_subnet_ids.main_private) : 0
+  subnet_id      = element(aws_subnet.main_private.*.id, count.index)
   route_table_id = aws_route_table.main_private.id
 }
 
