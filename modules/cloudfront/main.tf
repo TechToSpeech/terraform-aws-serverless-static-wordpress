@@ -14,7 +14,7 @@ resource "aws_cloudfront_function" "object_rewrite" {
   code    = templatefile(
     "${path.module}/function_rewrite/index.js.tftpl",
     {
-      REDIRECTS = var.cloudfront_function_redirects
+      REDIRECTS = var.cloudfront_function_301_redirects
     }
   )
 }

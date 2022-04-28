@@ -104,7 +104,7 @@ variable "cloudfront_class" {
   default     = "PriceClass_All"
 }
 
-variable "cloudfront_function_redirects" {
+variable "cloudfront_function_301_redirects" {
   type        = map
   default     = {
     "^(.*)index\\.php$": "$1"
