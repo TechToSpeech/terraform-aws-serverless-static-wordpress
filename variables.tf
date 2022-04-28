@@ -109,7 +109,7 @@ variable "cloudfront_function_redirects" {
   default     = {
     "^(.*)index\\.php$": "$1"
   }
-  description = "A list of key value pairs of Regex match to destination for CloudFront to do 301 redirects."
+  description = "A list of key value pairs of Regex match and destination for 301 redirects at CloudFront."
 }
 
 variable "hosted_zone_id" {
