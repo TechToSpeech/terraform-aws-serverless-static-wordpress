@@ -16,6 +16,8 @@ module "codebuild" {
   wordpress_ecr_repository   = aws_ecr_repository.serverless_wordpress.name
   aws_account_id             = var.aws_account_id
   container_memory           = var.ecs_memory
+  wp2static_version          = var.wp2static_version
+  wp2static_s3_addon_version = var.wp2static_s3_addon_version
 }
 
 module "cloudfront" {
@@ -29,8 +31,10 @@ module "cloudfront" {
   }
   depends_on = [aws_acm_certificate_validation.wordpress_site,
   module.waf]
-  cloudfront_class = var.cloudfront_class
-  waf_acl_arn      = var.waf_enabled ? module.waf[0].waf_acl_arn : null
+  
+  cloudfront_class                  = var.cloudfront_class
+  waf_acl_arn                       = var.waf_enabled ? module.waf[0].waf_acl_arn : null
+  cloudfront_function_301_redirects = var.cloudfront_function_301_redirects
 }
 
 module "waf" {
