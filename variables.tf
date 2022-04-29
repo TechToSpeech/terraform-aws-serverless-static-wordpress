@@ -154,6 +154,18 @@ variable "wordpress_memory_limit" {
   default     = "256M"
 }
 
+variable "wp2static_version" {
+  type        = string
+  description = "Version of WP2Static to use from https://github.com/leonstafford/wp2static/releases"
+  default     = "7.1.7"
+}
+
+variable "wp2static_s3_addon_version" {
+  type        = string
+  description = "Version of the WP2Static S3 Add-on to use from https://github.com/leonstafford/wp2static-addon-s3/releases/"
+  default     = "1.0"
+}
+
 variable "waf_acl_rules" {
   type        = list(any)
   description = "List of WAF rules to apply. Can be customized to apply others created outside of module."

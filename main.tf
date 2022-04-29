@@ -16,6 +16,8 @@ module "codebuild" {
   wordpress_ecr_repository   = aws_ecr_repository.serverless_wordpress.name
   aws_account_id             = var.aws_account_id
   container_memory           = var.ecs_memory
+  wp2static_version          = var.wp2static_version
+  wp2static_s3_addon_version = var.wp2static_s3_addon_version
 }
 
 module "cloudfront" {
