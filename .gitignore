@@ -10,6 +10,7 @@ modules/codebuild/codebuild_files/php.ini
 # *.tfstate
 # *.tfstate.*
 .terraform.lock.hcl
+
 plan.plan
 # Crash log files
 crash.log
@@ -35,3 +36,4 @@ override.tf.json
 # example: *tfplan*
 
 .idea
+.vscode

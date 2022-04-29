@@ -10,10 +10,13 @@ This module sets up the build to take a vanilla Wordpress image and bake customi
 | <a name="input_aws_account_id"></a> [aws\_account\_id](#input\_aws\_account\_id) | The AWS account ID into which resources will be launched. | `string` | n/a | yes |
 | <a name="input_codebuild_bucket"></a> [codebuild\_bucket](#input\_codebuild\_bucket) | The name of the bucket used for codebuild of the image. | `string` | n/a | yes |
 | <a name="input_container_memory"></a> [container\_memory](#input\_container\_memory) | The memory allocated to the container (in MB) | `number` | n/a | yes |
+| <a name="input_graviton_codebuild_enabled"></a> [graviton\_codebuild\_enabled](#input\_graviton\_codebuild\_enabled) | Flag that controls whether CodeBuild should use Graviton-based build agents in [supported regions](https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-compute-types.html). | `bool` | `false` | no |
 | <a name="input_main_vpc_id"></a> [main\_vpc\_id](#input\_main\_vpc\_id) | The VPC ID into which to launch resources. | `string` | n/a | yes |
 | <a name="input_site_domain"></a> [site\_domain](#input\_site\_domain) | The site domain name to configure (without any subdomains such as 'www') | `string` | n/a | yes |
 | <a name="input_site_name"></a> [site\_name](#input\_site\_name) | The unique name for this instance of the module. Required to deploy multiple wordpress instances to the same AWS account (if desired). | `string` | n/a | yes |
 | <a name="input_wordpress_ecr_repository"></a> [wordpress\_ecr\_repository](#input\_wordpress\_ecr\_repository) | The ECR repository where the Wordpress image is stored. | `string` | n/a | yes |
+| <a name="input_wp2static_s3_addon_version"></a> [wp2static\_s3\_addon\_version](#input\_wp2static\_s3\_addon\_version) | Version of the WP2Static S3 Add-on to use from https://github.com/leonstafford/wp2static-addon-s3/releases/ | `string` | `"1.0"` | no |
+| <a name="input_wp2static_version"></a> [wp2static\_version](#input\_wp2static\_version) | Version of WP2Static to use from https://github.com/leonstafford/wp2static/releases | `string` | `"7.1.7"` | no |
 ## Modules
 
 No modules.
@@ -35,8 +38,10 @@ No requirements.
 | [aws_iam_role.codebuild_service_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role_policy_attachment.codebuild_role_attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_s3_bucket.code_source](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket) | resource |
-| [aws_s3_bucket_object.wordpress_dockerbuild](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_object) | resource |
+| [aws_s3_bucket_acl.code_source](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_acl) | resource |
 | [aws_s3_bucket_public_access_block.code_source](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block) | resource |
+| [aws_s3_bucket_server_side_encryption_configuration.code_source](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_server_side_encryption_configuration) | resource |
+| [aws_s3_object.wordpress_dockerbuild](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_object) | resource |
 | [aws_security_group.codebuild_security_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group) | resource |
 | [local_file.php_ini](https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/file) | resource |
 | [archive_file.code_build_package](https://registry.terraform.io/providers/hashicorp/archive/latest/docs/data-sources/file) | data source |

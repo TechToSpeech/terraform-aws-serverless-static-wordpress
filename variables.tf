@@ -1,3 +1,10 @@
+locals {
+  graviton_fargate_regions_unsupported = [
+    "af-south-1",
+    "me-south-1"
+  ]
+}
+
 variable "main_vpc_id" {
   type        = string
   description = "The VPC ID into which to launch resources."
@@ -97,6 +104,14 @@ variable "cloudfront_class" {
   default     = "PriceClass_All"
 }
 
+variable "cloudfront_function_301_redirects" {
+  type = map(any)
+  default = {
+    "^(.*)index\\.php$" : "$1"
+  }
+  description = "A list of key value pairs of Regex match and destination for 301 redirects at CloudFront."
+}
+
 variable "hosted_zone_id" {
   type        = string
   description = "The Route53 HostedZone ID to use to create records in."
@@ -133,6 +148,24 @@ variable "wordpress_admin_email" {
   default     = "admin@example.com"
 }
 
+variable "wordpress_memory_limit" {
+  type        = string
+  description = "The memory to allow the Wordpress process to use (in M)"
+  default     = "256M"
+}
+
+variable "wp2static_version" {
+  type        = string
+  description = "Version of WP2Static to use from https://github.com/WP2Static/wp2static/releases"
+  default     = "7.1.7"
+}
+
+variable "wp2static_s3_addon_version" {
+  type        = string
+  description = "Version of the WP2Static S3 Add-on to use from https://github.com/leonstafford/wp2static-addon-s3/releases/"
+  default     = "1.0"
+}
+
 variable "waf_acl_rules" {
   type        = list(any)
   description = "List of WAF rules to apply. Can be customized to apply others created outside of module."
@@ -165,4 +198,16 @@ variable "waf_acl_rules" {
       sampled_requests_enabled   = true
     }
   ]
+}
+
+variable "graviton_codebuild_enabled" {
+  type        = bool
+  default     = false
+  description = "Flag that controls whether CodeBuild should use Graviton-based build agents in [supported regions](https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-compute-types.html)."
+}
+
+variable "graviton_fargate_enabled" {
+  type        = bool
+  default     = false
+  description = "Flag that controls whether ECS Fargate should use Graviton-based containers in [supported regions]https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate-Regions.html)."
 }
