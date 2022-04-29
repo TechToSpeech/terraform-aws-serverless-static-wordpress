@@ -66,7 +66,7 @@ variable "graviton_codebuild_enabled" {
 
 variable "wp2static_version" {
   type        = string
-  description = "Version of WP2Static to use from https://github.com/leonstafford/wp2static/releases"
+  description = "Version of WP2Static to use from https://github.com/WP2Static/wp2static/releases"
   default     = "7.1.7"
 }
 
