@@ -1,5 +1,5 @@
 [
-    {       
+    {
         "cpu": ${tonumber(container_cpu)},
         "environment": [
             {"name": "ECS_ENABLE_CONTAINER_METADATA", "value": "true"},
@@ -42,7 +42,7 @@
             "timeout": 5,
             "interval": 10,
             "startPeriod": 60
-        },        
+        },
         %{ endif }
         "volumesFrom" : [],
         "logConfiguration": {

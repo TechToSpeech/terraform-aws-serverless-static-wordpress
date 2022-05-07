@@ -82,7 +82,7 @@ variable "ecs_memory" {
 variable "ecs_healthcheck_enabled" {
   default     = true
   description = "Runs an healtchcheck against the container."
-  type        = bool  
+  type        = bool
 }
 
 variable "snapshot_identifier" {

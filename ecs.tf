@@ -46,7 +46,7 @@ data "aws_iam_policy_document" "wordpress_bucket_access" {
 
 data "aws_iam_policy_document" "wordpress_ecs_exec" {
   statement {
-    actions   = [
+    actions = [
       "ssmmessages:CreateControlChannel",
       "ssmmessages:CreateDataChannel",
       "ssmmessages:OpenControlChannel",
@@ -260,7 +260,7 @@ resource "aws_ecs_service" "wordpress_service" {
   propagate_tags = "SERVICE"
   # Explicitly setting version here: https://stackoverflow.com/questions/62552562/one-or-more-of-the-requested-capabilities-are-not-supported-aws-fargate
   platform_version = "1.4.0"
-  
+
   network_configuration {
     subnets          = var.subnet_ids
     security_groups  = [aws_security_group.wordpress_security_group.id]
