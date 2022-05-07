@@ -106,24 +106,25 @@ resource "aws_cloudwatch_log_group" "wordpress_container" {
 resource "aws_ecs_task_definition" "wordpress_container" {
   family = "${var.site_name}_wordpress"
   container_definitions = templatefile("${path.module}/task-definitions/wordpress.json", {
-    db_host                  = aws_rds_cluster.serverless_wordpress.endpoint,
-    db_user                  = aws_rds_cluster.serverless_wordpress.master_username,
-    db_password              = random_password.serverless_wordpress_password.result,
-    db_name                  = aws_rds_cluster.serverless_wordpress.database_name,
-    wordpress_image          = "${aws_ecr_repository.serverless_wordpress.repository_url}:latest",
-    wp_dest                  = "https://${var.site_prefix}.${var.site_domain}",
-    wp_region                = var.s3_region,
-    wp_bucket                = module.cloudfront.wordpress_bucket_id,
-    container_dns            = "${var.wordpress_subdomain}.${var.site_domain}",
-    container_dns_zone       = var.hosted_zone_id,
-    container_cpu            = var.ecs_cpu,
-    container_memory         = var.ecs_memory
-    efs_source_volume        = "${var.site_name}_wordpress_persistent"
-    wordpress_admin_user     = var.wordpress_admin_user
-    wordpress_admin_password = var.wordpress_admin_password
-    wordpress_admin_email    = var.wordpress_admin_email
-    site_name                = var.site_name
-    wordpress_memory_limit   = var.wordpress_memory_limit
+    db_host                       = aws_rds_cluster.serverless_wordpress.endpoint
+    db_user                       = aws_rds_cluster.serverless_wordpress.master_username
+    db_password                   = random_password.serverless_wordpress_password.result
+    db_name                       = aws_rds_cluster.serverless_wordpress.database_name
+    wordpress_image               = "${aws_ecr_repository.serverless_wordpress.repository_url}:latest"
+    wp_dest                       = "https://${var.site_prefix}.${var.site_domain}"
+    wp_region                     = var.s3_region
+    wp_bucket                     = module.cloudfront.wordpress_bucket_id
+    container_dns                 = "${var.wordpress_subdomain}.${var.site_domain}"
+    container_dns_zone            = var.hosted_zone_id
+    container_cpu                 = var.ecs_cpu
+    container_memory              = var.ecs_memory
+    container_healthcheck_enabled = var.ecs_healthcheck_enabled
+    efs_source_volume             = "${var.site_name}_wordpress_persistent"
+    wordpress_admin_user          = var.wordpress_admin_user
+    wordpress_admin_password      = var.wordpress_admin_password
+    wordpress_admin_email         = var.wordpress_admin_email
+    site_name                     = var.site_name
+    wordpress_memory_limit        = var.wordpress_memory_limit
   })
 
   runtime_platform {
