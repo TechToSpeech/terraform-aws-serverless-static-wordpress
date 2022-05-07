@@ -44,6 +44,19 @@ data "aws_iam_policy_document" "wordpress_bucket_access" {
   }
 }
 
+data "aws_iam_policy_document" "wordpress_ecs_exec" {
+  statement {
+    actions   = [
+      "ssmmessages:CreateControlChannel",
+      "ssmmessages:CreateDataChannel",
+      "ssmmessages:OpenControlChannel",
+      "ssmmessages:OpenDataChannel"
+    ]
+    effect    = "Allow"
+    resources = ["*"]
+  }
+}
+
 resource "aws_iam_policy" "wordpress_bucket_access" {
   name        = "${var.site_name}_WordpressBucketAccess"
   description = "The role that allows Wordpress task to do necessary operations"
@@ -53,6 +66,17 @@ resource "aws_iam_policy" "wordpress_bucket_access" {
 resource "aws_iam_role_policy_attachment" "wordpress_bucket_access" {
   role       = aws_iam_role.wordpress_task.name
   policy_arn = aws_iam_policy.wordpress_bucket_access.arn
+}
+
+resource "aws_iam_policy" "wordpress_ecs_exec" {
+  name        = "${var.site_name}_WordpressECSExec"
+  description = "Allows ECS Exec to the Wordpress container"
+  policy      = data.aws_iam_policy_document.wordpress_ecs_exec.json
+}
+
+resource "aws_iam_role_policy_attachment" "wordpress_ecs_exec" {
+  role       = aws_iam_role.wordpress_task.name
+  policy_arn = aws_iam_policy.wordpress_ecs_exec.arn
 }
 
 resource "aws_iam_role" "wordpress_task" {
@@ -221,10 +245,12 @@ resource "aws_security_group_rule" "wordpress_sg_egress_3306" {
 
 
 resource "aws_ecs_service" "wordpress_service" {
-  name            = "${var.site_name}_wordpress"
-  task_definition = "${aws_ecs_task_definition.wordpress_container.family}:${aws_ecs_task_definition.wordpress_container.revision}"
-  cluster         = aws_ecs_cluster.wordpress_cluster.arn
-  desired_count   = var.launch
+  name                   = "${var.site_name}_wordpress"
+  task_definition        = "${aws_ecs_task_definition.wordpress_container.family}:${aws_ecs_task_definition.wordpress_container.revision}"
+  cluster                = aws_ecs_cluster.wordpress_cluster.arn
+  desired_count          = var.launch
+  enable_execute_command = true
+
   # iam_role =
   capacity_provider_strategy {
     capacity_provider = var.graviton_fargate_enabled ? (contains(local.graviton_fargate_regions_unsupported, data.aws_region.current) ? "FARGATE_SPOT" : "FARGATE") : "FARGATE_SPOT"
@@ -234,7 +260,7 @@ resource "aws_ecs_service" "wordpress_service" {
   propagate_tags = "SERVICE"
   # Explicitly setting version here: https://stackoverflow.com/questions/62552562/one-or-more-of-the-requested-capabilities-are-not-supported-aws-fargate
   platform_version = "1.4.0"
-
+  
   network_configuration {
     subnets          = var.subnet_ids
     security_groups  = [aws_security_group.wordpress_security_group.id]

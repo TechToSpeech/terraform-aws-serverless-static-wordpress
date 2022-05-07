@@ -223,6 +223,13 @@ that generates this file and the crawl job can fail fast if it cannot locate it.
 relating to WP2Static, [raise an issue on their repo](https://github.com/leonstafford/wp2static/issues).
 For any issues relating to this module, [raise an issue against this repo.](https://github.com/TechToSpeech/terraform-aws-serverless-static-wordpress/issues)
 
+
+### Connecting to container with ECS Exec
+
+ECS Exec is supported to help troubleshooting container issues. Read to [AWS Docs](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-exec.html) for usage instructions.
+
+It's recommended that the `ecs_healthcheck_enabled` variable is set to `false` to prevent the container from being terminated and replaced while troubleshooting.
+
 ## Inputs
 
 | Name | Description | Type | Default | Required |

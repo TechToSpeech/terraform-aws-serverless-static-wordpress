@@ -52,6 +52,9 @@
               "awslogs-region": "${wp_region}",
               "awslogs-stream-prefix": "ecs"
             }
+        },
+        "linuxParameters": {
+            "initProcessEnabled": true
         }
     }
 ]
