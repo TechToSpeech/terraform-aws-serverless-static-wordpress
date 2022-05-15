@@ -194,10 +194,16 @@ Default password: techtospeech.com
 Change these on first log in or specify your own in module instantiation.
 
 You will find WP2Static with S3 Add-on installed. Go to the WP2Static Menu->Addons, and click the 'Disabled' button to
-Enable the Add-on.
+Enable the Add-on. Enable enabling, click the Configure icon on this page. In the S3 table, change "Object ACL" from
+"public-read" to "private". In the CloudFront table, copy the region from the S3 table and enter your CloudFront
+Distribution ID. You can find the ID in the AWS console. Then click "Save S3 Options". See
+[this GitHub issue](https://github.com/TechToSpeech/terraform-aws-serverless-static-wordpress/issues/15) to automate
+these changes.
 
-The configuration of the plugin has been set up such that no additional configuration is required unless you wish to
-change any options.
+Finally, you'll need to configure permalinks to a format that is supported on static sites. Go to Settings -> Permalinks
+in the sidebar. By default, `plain` is likely selected. You need to change this to any other format for static
+publishing to work. Click "Save Changes" to confirm the change. You can confirm you have selected a valid choice by
+viewing WP2Static Menu -> Diagnostics.
 
 You may now edit Wordpress as you would normally, customize your site as you like, and when ready proceed to the 'Run'
 section of the WP2Static plugin, and click the 'Generate Static Site' button. This will take some minutes depending on
