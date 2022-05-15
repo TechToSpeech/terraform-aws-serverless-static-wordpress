@@ -40,6 +40,12 @@ data "aws_iam_policy_document" "wordpress_bucket_access" {
     effect    = "Allow"
     resources = ["arn:aws:route53:::hostedzone/${var.hosted_zone_id}"]
   }
+
+  statement {
+    actions = ["cloudfront:CreateInvalidation"]
+    effect  = "Allow"
+    resources = [module.cloudfront.wordpress_cloudfront_distribution_arn]
+  }
 }
 
 resource "aws_iam_policy" "wordpress_bucket_access" {
