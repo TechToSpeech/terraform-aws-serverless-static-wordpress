@@ -21,6 +21,7 @@ module "cloudfront" {
   source             = "./modules/cloudfront"
   site_name          = var.site_name
   site_domain        = var.site_domain
+  site_prefix        = var.site_prefix
   cloudfront_ssl     = aws_acm_certificate.wordpress_site.arn
   cloudfront_aliases = var.cloudfront_aliases
   providers = {
