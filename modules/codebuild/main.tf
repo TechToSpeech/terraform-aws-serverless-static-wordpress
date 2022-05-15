@@ -5,15 +5,22 @@ data "aws_region" "current" {}
 #tfsec:ignore:AWS002 #tfsec:ignore:AWS077
 resource "aws_s3_bucket" "code_source" {
   bucket        = var.codebuild_bucket
-  acl           = "private"
   force_destroy = true
-  server_side_encryption_configuration {
-    rule {
+}
+
+resource "aws_s3_bucket_acl" "code_source" {
+  bucket = aws_s3_bucket.code_source.id
+  acl    = "private"
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "code_source" {
+  bucket = aws_s3_bucket.code_source.bucket
+
+  rule {
       apply_server_side_encryption_by_default {
         sse_algorithm = "AES256"
       }
     }
-  }
 }
 
 resource "aws_s3_bucket_public_access_block" "code_source" {
