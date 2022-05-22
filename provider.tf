@@ -10,7 +10,7 @@ terraform {
     random = {
       source = "hashicorp/random"
       # https://github.com/hashicorp/terraform-provider-random/blob/main/CHANGELOG.md
-      version = "~> 3.1.0"
+      version = "~> 3.2.0"
     }
   }
 }
