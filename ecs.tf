@@ -135,7 +135,7 @@ resource "aws_ecs_task_definition" "wordpress_container" {
     db_password                   = random_password.serverless_wordpress_password.result
     db_name                       = aws_rds_cluster.serverless_wordpress.database_name
     wordpress_image               = "${aws_ecr_repository.serverless_wordpress.repository_url}:latest"
-    wp_dest                       = "https://${var.site_prefix}.${var.site_domain}"
+    wp_dest                       = "https://${local.domain}"
     wp_region                     = var.s3_region
     wp_bucket                     = module.cloudfront.wordpress_bucket_id
     container_dns                 = "${var.wordpress_subdomain}.${var.site_domain}"
