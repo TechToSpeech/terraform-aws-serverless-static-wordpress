@@ -1,7 +1,6 @@
 # Build artifacts
 modules/cloudfront/lambda_redirect/dst/*
 modules/codebuild/codebuild_files/wordpress_docker.zip
-modules/codebuild/codebuild_files/php.ini
 
 # Local .terraform directories
 **/.terraform/*
