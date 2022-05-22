@@ -35,9 +35,6 @@ data "archive_file" "code_build_package" {
   output_path = "${path.module}/codebuild_files/wordpress_docker.zip"
   excludes    = ["wordpress_docker.zip"]
   source_dir  = "${path.module}/codebuild_files/"
-  depends_on = [
-    local_file.php_ini
-  ]
 }
 
 data "aws_iam_policy_document" "codebuild_assume_role_policy" {
@@ -151,15 +148,4 @@ resource "aws_codebuild_project" "wordpress_docker_build" {
     location = "${aws_s3_bucket.code_source.id}/${aws_s3_object.wordpress_dockerbuild.id}"
 
   }
-}
-
-resource "local_file" "php_ini" {
-  content  = <<-EOT
-      upload_max_filesize=64M
-      post_max_size=64M
-      max_execution_time=0
-      max_input_vars=2000
-      memory_limit=${var.container_memory}M
-    EOT
-  filename = "${path.module}/codebuild_files/php.ini"
 }

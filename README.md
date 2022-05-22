@@ -223,7 +223,7 @@ Some aspects that need to be taken into consideration for the match:
 
 An example to match a path like `/category-name`, a suitable match would be `"^\\/(category-name)$"`. Breaking down the `\\/` part, the first `\` tells TF to escape the second `\`, which is the Regex escape for the `/` character.
 
-An example:
+Example:
 
 ```
 cloudfront_function_301_redirects = {

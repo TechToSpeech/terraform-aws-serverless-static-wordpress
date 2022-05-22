@@ -1,4 +1,5 @@
 locals {
+  domain = "${var.site_prefix}${var.site_prefix == "" ? "" : "."}${var.site_domain}"
   graviton_fargate_regions_unsupported = [
     "af-south-1",
     "me-south-1"
