@@ -44,3 +44,9 @@ variable "cloudfront_function_301_redirects" {
   }
   description = "A list of key value pairs of Regex match and destination for 301 redirects at CloudFront."
 }
+
+variable "canonical_domain" {
+  type        = string
+  default     = null
+  description = "The canonical domain name for the distribution."  
+}
