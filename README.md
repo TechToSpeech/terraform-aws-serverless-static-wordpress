@@ -254,6 +254,7 @@ For any issues relating to this module, [raise an issue against this repo.](http
 | <a name="input_cloudfront_class"></a> [cloudfront\_class](#input\_cloudfront\_class) | The [price class](https://aws.amazon.com/cloudfront/pricing/) for the distribution. One of: PriceClass\_All, PriceClass\_200, PriceClass\_100 | `string` | `"PriceClass_All"` | no |
 | <a name="input_cloudfront_function_301_redirects"></a> [cloudfront\_function\_301\_redirects](#input\_cloudfront\_function\_301\_redirects) | A list of key value pairs of Regex match and destination for 301 redirects at CloudFront. | `map(any)` | <pre>{<br>  "^(.*)index\\.php$": "$1"<br>}</pre> | no |
 | <a name="input_ecs_cpu"></a> [ecs\_cpu](#input\_ecs\_cpu) | The CPU limit password to the Wordpress container definition. | `number` | `256` | no |
+| <a name="input_ecs_healthcheck_enabled"></a> [ecs\_healthcheck\_enabled](#input\_ecs\_healthcheck\_enabled) | Runs an healtchcheck against the container. | `bool` | `true` | no |
 | <a name="input_ecs_memory"></a> [ecs\_memory](#input\_ecs\_memory) | The memory limit password to the Wordpress container definition. | `number` | `512` | no |
 | <a name="input_graviton_codebuild_enabled"></a> [graviton\_codebuild\_enabled](#input\_graviton\_codebuild\_enabled) | Flag that controls whether CodeBuild should use Graviton-based build agents in [supported regions](https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-compute-types.html). | `bool` | `false` | no |
 | <a name="input_graviton_fargate_enabled"></a> [graviton\_fargate\_enabled](#input\_graviton\_fargate\_enabled) | Flag that controls whether ECS Fargate should use Graviton-based containers in [supported regions]https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate-Regions.html). | `bool` | `false` | no |
@@ -274,6 +275,8 @@ For any issues relating to this module, [raise an issue against this repo.](http
 | <a name="input_wordpress_admin_user"></a> [wordpress\_admin\_user](#input\_wordpress\_admin\_user) | The username of the default wordpress admin user. | `string` | `"supervisor"` | no |
 | <a name="input_wordpress_memory_limit"></a> [wordpress\_memory\_limit](#input\_wordpress\_memory\_limit) | The memory to allow the Wordpress process to use (in M) | `string` | `"256M"` | no |
 | <a name="input_wordpress_subdomain"></a> [wordpress\_subdomain](#input\_wordpress\_subdomain) | The subdomain used for the Wordpress container. | `string` | `"wordpress"` | no |
+| <a name="input_wp2static_s3_addon_version"></a> [wp2static\_s3\_addon\_version](#input\_wp2static\_s3\_addon\_version) | Version of the WP2Static S3 Add-on to use from https://github.com/leonstafford/wp2static-addon-s3/releases/ | `string` | `"1.0"` | no |
+| <a name="input_wp2static_version"></a> [wp2static\_version](#input\_wp2static\_version) | Version of WP2Static to use from https://github.com/WP2Static/wp2static/releases | `string` | `"7.1.7"` | no |
 ## Modules
 
 | Name | Source | Version |
@@ -315,8 +318,10 @@ For any issues relating to this module, [raise an issue against this repo.](http
 | [aws_efs_file_system.wordpress_persistent](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/efs_file_system) | resource |
 | [aws_efs_mount_target.wordpress_efs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/efs_mount_target) | resource |
 | [aws_iam_policy.wordpress_bucket_access](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
+| [aws_iam_policy.wordpress_ecs_exec](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_iam_role.wordpress_task](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role_policy_attachment.wordpress_bucket_access](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
+| [aws_iam_role_policy_attachment.wordpress_ecs_exec](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_iam_role_policy_attachment.wordpress_role_attachment_cloudwatch](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_iam_role_policy_attachment.wordpress_role_attachment_ecs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_rds_cluster.serverless_wordpress](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/rds_cluster) | resource |
@@ -337,5 +342,6 @@ For any issues relating to this module, [raise an issue against this repo.](http
 | [random_password.serverless_wordpress_password](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/password) | resource |
 | [aws_iam_policy_document.ecs_assume_role_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.wordpress_bucket_access](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
+| [aws_iam_policy_document.wordpress_ecs_exec](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) | data source |
 <!-- END_TF_DOCS -->

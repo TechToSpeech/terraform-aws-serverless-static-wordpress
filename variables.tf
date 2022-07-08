@@ -80,6 +80,12 @@ variable "ecs_memory" {
   description = "The memory limit password to the Wordpress container definition."
 }
 
+variable "ecs_healthcheck_enabled" {
+  default     = true
+  description = "Runs an healtchcheck against the container."
+  type        = bool
+}
+
 variable "snapshot_identifier" {
   description = "To create the RDS cluster from a previous snapshot in the same region, specify it by name."
   type        = string

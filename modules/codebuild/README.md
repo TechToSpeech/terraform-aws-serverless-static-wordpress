@@ -16,7 +16,7 @@ This module sets up the build to take a vanilla Wordpress image and bake customi
 | <a name="input_site_name"></a> [site\_name](#input\_site\_name) | The unique name for this instance of the module. Required to deploy multiple wordpress instances to the same AWS account (if desired). | `string` | n/a | yes |
 | <a name="input_wordpress_ecr_repository"></a> [wordpress\_ecr\_repository](#input\_wordpress\_ecr\_repository) | The ECR repository where the Wordpress image is stored. | `string` | n/a | yes |
 | <a name="input_wp2static_s3_addon_version"></a> [wp2static\_s3\_addon\_version](#input\_wp2static\_s3\_addon\_version) | Version of the WP2Static S3 Add-on to use from https://github.com/leonstafford/wp2static-addon-s3/releases/ | `string` | `"1.0"` | no |
-| <a name="input_wp2static_version"></a> [wp2static\_version](#input\_wp2static\_version) | Version of WP2Static to use from https://github.com/leonstafford/wp2static/releases | `string` | `"7.1.7"` | no |
+| <a name="input_wp2static_version"></a> [wp2static\_version](#input\_wp2static\_version) | Version of WP2Static to use from https://github.com/WP2Static/wp2static/releases | `string` | `"7.1.7"` | no |
 ## Modules
 
 No modules.
