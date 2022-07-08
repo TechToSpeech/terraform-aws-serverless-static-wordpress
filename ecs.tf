@@ -148,7 +148,7 @@ resource "aws_ecs_task_definition" "wordpress_container" {
     wordpress_admin_password      = var.wordpress_admin_password
     wordpress_admin_email         = var.wordpress_admin_email
     site_name                     = var.site_name
-    wordpress_memory_limit        = var.wordpress_memory_limit
+    wordpress_memory_limit        = var.wordpress_memory_limit    
   })
 
   runtime_platform {

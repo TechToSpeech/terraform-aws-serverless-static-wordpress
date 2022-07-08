@@ -119,6 +119,12 @@ variable "cloudfront_function_301_redirects" {
   description = "A list of key value pairs of Regex match and destination for 301 redirects at CloudFront."
 }
 
+variable "cloudfront_function_canonical_domain_redirect" {
+  type        = bool
+  default     = false 
+  description = "If set to true it will redirect any requests to site_prefix and site_domain when the host header does not match them."
+}
+
 variable "hosted_zone_id" {
   type        = string
   description = "The Route53 HostedZone ID to use to create records in."
