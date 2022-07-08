@@ -3,6 +3,26 @@ function handler(event) {
     var uri = request.uri;
 
     try {
+        %{ if CANONICAL_DOMAIN != "" }
+        if (request.headers.host.value !== '${CANONICAL_DOMAIN}' ) {
+            var target = 'https://${CANONICAL_DOMAIN}' + uri;
+            if (Object.keys(request.querystring).length > 0) {
+                    target = target + '?';
+                for (var key in request.querystring) {
+                    if (!target.endsWith('?')) { target = target + '&'; }
+                    target = target + key + '=' + request.querystring[key].value;
+                }
+            }
+            return {
+                statusCode: 301,
+                statusDescription: 'Moved Permanently',
+                headers: {
+                    'location': { value: target }
+                }
+            };
+        }
+        %{ endif }
+
         %{ for match, target in REDIRECTS }
         if (/${match}/.test(uri)) {
             return permanentRedirect(uri, /${match}/, '${target}');
