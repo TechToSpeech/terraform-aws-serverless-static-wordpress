@@ -1,8 +1,8 @@
 resource "aws_acm_certificate" "wordpress_site" {
-  domain_name       = var.site_domain
+  domain_name       = local.domain
   validation_method = "DNS"
 
-  subject_alternative_names = ["${var.site_prefix}.${var.site_domain}"]
+  subject_alternative_names = var.cloudfront_aliases
 
   lifecycle {
     create_before_destroy = true
