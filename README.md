@@ -210,6 +210,28 @@ in your module definition.
 Gentle reminder that no backup options are currently bundled with this module - the most effective means would be to
 generate and retain a backup from within Wordpress for maximum flexibility. We recommend the UpdraftPlus plugin.
 
+## Permanent Redirects
+
+Basic url path based permanent redirects are supported via the CloudFront function. The variable `cloudfront_function_301_redirects` can be set with a custom map of match to destination mappings.
+
+Some aspects that need to be taken into consideration for the match:
+
+* It's a regular expression
+* Group replacements are supported
+* Runs in a Javascript function, escaping needs to be taken into consideration
+* Passed through a TF var, so escaping that needs to be taking into account as well
+
+An example to match a path like `/category-name`, a suitable match would be `"^\\/(category-name)$"`. Breaking down the `\\/` part, the first `\` tells TF to escape the second `\`, which is the Regex escape for the `/` character.
+
+Example:
+
+```
+cloudfront_function_301_redirects = {
+  # Redirects /travel to /category/travel/
+  "^\\/(travel)$": "/category/$1/",
+}
+```
+
 ## Troubleshooting
 
 If you experience issues with the publish element of WP2Static, you can retry. It can be more reliable to proceed to
