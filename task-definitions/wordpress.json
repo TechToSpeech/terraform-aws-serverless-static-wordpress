@@ -14,7 +14,8 @@
         {"name": "CONTAINER_DNS_ZONE", "value": "${container_dns_zone}"},
         {"name": "WORDPRESS_ADMIN_USER", "value": "${wordpress_admin_user}"},
         {"name": "WORDPRESS_ADMIN_PASSWORD", "value": "${wordpress_admin_password}"},
-        {"name": "WORDPRESS_ADMIN_EMAIL", "value": "${wordpress_admin_email}"}
+        {"name": "WORDPRESS_ADMIN_EMAIL", "value": "${wordpress_admin_email}"},
+        {"name": "WP_MEMORY_LIMIT", "value": "${wordpress_memory_limit}"}
     ],
     "essential": true,
     "image": "${wordpress_image}",
@@ -34,6 +35,13 @@
             "readOnly": false
         }
     ],
+    "healthCheck": {
+      "retries": 10,
+      "command": [ "CMD-SHELL", "curl -f http://localhost:80/ || exit 1" ],
+      "timeout": 5,
+      "interval": 10,
+      "startPeriod": 60
+    },
     "volumesFrom" : [],
     "logConfiguration": {
         "logDriver": "awslogs",

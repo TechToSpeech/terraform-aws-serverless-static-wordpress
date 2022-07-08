@@ -120,26 +120,26 @@ resource "aws_cloudwatch_event_rule" "ecs_wordpress_instance_state" {
   )
 }
 
-# resource "aws_cloudwatch_event_rule" "ecs_wordpress_service_action" {
-#   name        = "ecs-wordpress-service-action"
-#   description = "Event on Wordpress ECS Service Action"
+resource "aws_cloudwatch_event_rule" "ecs_wordpress_service_action" {
+  name        = "${var.site_name}-ecs-wordpress-service-action"
+  description = "Event on Wordpress ECS Service Action"
 
-#   event_pattern = jsonencode(
-# {
-#   "source": [
-#     "aws.ecs"
-#   ],
-#   "detail-type": [
-#     "ECS Service Action"
-#   ],
-#   "detail": {
-#     "clusterArn": [
-#       aws_ecs_cluster.wordpress_cluster.arn
-#     ]
-#   }
-# }
-# )
-# }
+  event_pattern = jsonencode(
+    {
+      "source" : [
+        "aws.ecs"
+      ],
+      "detail-type" : [
+        "ECS Service Action"
+      ],
+      "detail" : {
+        "clusterArn" : [
+          var.ecs_cluster_arn
+        ]
+      }
+    }
+  )
+}
 
 resource "aws_cloudwatch_event_rule" "ecs_wordpress_service_deployment_state" {
   name        = "${var.site_name}-ecs-wordpress-deployment-state"
@@ -178,10 +178,10 @@ resource "aws_cloudwatch_event_target" "lambda_slack_task_state" {
   rule = aws_cloudwatch_event_rule.ecs_wordpress_task_state.id
 }
 
-# resource "aws_cloudwatch_event_target" "lambda_slack_service_action" {
-#   arn  = aws_lambda_function.lambda_slack.arn
-#   rule = aws_cloudwatch_event_rule.ecs_wordpress_service_action.id
-# }
+resource "aws_cloudwatch_event_target" "lambda_slack_service_action" {
+  arn  = aws_lambda_function.lambda_slack.arn
+  rule = aws_cloudwatch_event_rule.ecs_wordpress_service_action.id
+}
 
 resource "aws_cloudwatch_event_target" "lambda_slack_instance_state" {
   arn  = aws_lambda_function.lambda_slack.arn
@@ -206,13 +206,13 @@ resource "aws_lambda_permission" "allow_rule_task_state" {
   source_arn    = aws_cloudwatch_event_rule.ecs_wordpress_task_state.arn
 }
 
-# resource "aws_lambda_permission" "allow_rule_service_action" {
-#   statement_id  = "AllowExecutionFromECSServiceAction"
-#   action        = "lambda:InvokeFunction"
-#   function_name = aws_lambda_function.lambda_slack.function_name
-#   principal     = "events.amazonaws.com"
-#   source_arn    = aws_cloudwatch_event_rule.ecs_wordpress_service_action.arn
-# }
+resource "aws_lambda_permission" "allow_rule_service_action" {
+  statement_id  = "AllowExecutionFromECSServiceAction"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.lambda_slack.function_name
+  principal     = "events.amazonaws.com"
+  source_arn    = aws_cloudwatch_event_rule.ecs_wordpress_service_action.arn
+}
 
 resource "aws_lambda_permission" "allow_rule_instance_state" {
   statement_id  = "AllowExecutionFromECSInstanceState"

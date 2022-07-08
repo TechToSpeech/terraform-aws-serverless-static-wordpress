@@ -2,16 +2,22 @@ data "aws_region" "current" {}
 
 # TODO: Add optional logging for S3 bucket
 # TODO: Add optional versioning for S3 bucket
-#tfsec:ignore:AWS002 #tfsec:ignore:AWS077
+#tfsec:ignore:AWS002 #tfsec:ignore:AWS017 #tfsec:ignore:AWS077
 resource "aws_s3_bucket" "code_source" {
   bucket        = var.codebuild_bucket
-  acl           = "private"
   force_destroy = true
-  server_side_encryption_configuration {
-    rule {
-      apply_server_side_encryption_by_default {
-        sse_algorithm = "AES256"
-      }
+}
+
+resource "aws_s3_bucket_acl" "code_source" {
+  bucket = aws_s3_bucket.code_source.bucket
+  acl    = "private"
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "code_source" {
+  bucket = aws_s3_bucket.code_source.bucket
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
     }
   }
 }
@@ -55,7 +61,7 @@ resource "aws_iam_role_policy_attachment" "codebuild_role_attachment" {
   policy_arn = "arn:aws:iam::aws:policy/PowerUserAccess"
 }
 
-resource "aws_s3_bucket_object" "wordpress_dockerbuild" {
+resource "aws_s3_object" "wordpress_dockerbuild" {
   bucket = aws_s3_bucket.code_source.id
   key    = "wordpress_docker.zip"
   source = "${path.module}/codebuild_files/wordpress_docker.zip"
@@ -100,9 +106,10 @@ resource "aws_codebuild_project" "wordpress_docker_build" {
   }
 
   environment {
-    compute_type                = "BUILD_GENERAL1_SMALL"
-    image                       = "aws/codebuild/standard:4.0"
-    type                        = "LINUX_CONTAINER"
+    compute_type = "BUILD_GENERAL1_SMALL"
+    image        = var.graviton_codebuild_enabled ? "aws/codebuild/amazonlinux2-aarch64-standard:2.0" : "aws/codebuild/amazonlinux2-x86_64-standard:3.0"
+    # Use ARM for codebuild if in supporting region
+    type                        = var.graviton_codebuild_enabled ? (contains(local.arm_container_regions, data.aws_region.current.name) ? "ARM_CONTAINER" : "LINUX_CONTAINER") : "LINUX_CONTAINER"
     image_pull_credentials_type = "CODEBUILD"
     privileged_mode             = true
 
@@ -122,6 +129,14 @@ resource "aws_codebuild_project" "wordpress_docker_build" {
       name  = "IMAGE_TAG"
       value = "latest"
     }
+    environment_variable {
+      name  = "WP2STATIC_VERSION"
+      value = var.wp2static_version
+    }
+    environment_variable {
+      name  = "WP2STATIC_S3_ADDON_VERSION"
+      value = var.wp2static_s3_addon_version
+    }
   }
 
   logs_config {
@@ -133,7 +148,7 @@ resource "aws_codebuild_project" "wordpress_docker_build" {
 
   source {
     type     = "S3"
-    location = "${aws_s3_bucket.code_source.id}/${aws_s3_bucket_object.wordpress_dockerbuild.id}"
+    location = "${aws_s3_bucket.code_source.id}/${aws_s3_object.wordpress_dockerbuild.id}"
 
   }
 }

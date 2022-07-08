@@ -1,3 +1,5 @@
+data "aws_region" "current" {}
+
 resource "aws_efs_file_system" "wordpress_persistent" {
   encrypted = true
   lifecycle_policy {
@@ -121,7 +123,13 @@ resource "aws_ecs_task_definition" "wordpress_container" {
     wordpress_admin_password = var.wordpress_admin_password
     wordpress_admin_email    = var.wordpress_admin_email
     site_name                = var.site_name
+    wordpress_memory_limit   = var.wordpress_memory_limit
   })
+
+  runtime_platform {
+    operating_system_family = "LINUX"
+    cpu_architecture        = var.graviton_fargate_enabled ? (contains(local.graviton_fargate_regions_unsupported, data.aws_region.current) ? "X86_64" : "ARM64") : "X86_64"
+  }
 
   cpu                      = var.ecs_cpu
   memory                   = var.ecs_memory
@@ -218,7 +226,7 @@ resource "aws_ecs_service" "wordpress_service" {
   desired_count   = var.launch
   # iam_role =
   capacity_provider_strategy {
-    capacity_provider = "FARGATE_SPOT"
+    capacity_provider = var.graviton_fargate_enabled ? (contains(local.graviton_fargate_regions_unsupported, data.aws_region.current) ? "FARGATE_SPOT" : "FARGATE") : "FARGATE_SPOT"
     weight            = "100"
     base              = "1"
   }
@@ -236,10 +244,14 @@ resource "aws_ecs_service" "wordpress_service" {
 # TODO: Add option to enable container insights
 #tfsec:ignore:AWS090
 resource "aws_ecs_cluster" "wordpress_cluster" {
-  name               = "${var.site_name}_wordpress"
-  capacity_providers = ["FARGATE_SPOT"]
+  name = "${var.site_name}_wordpress"
+}
+
+resource "aws_ecs_cluster_capacity_providers" "wordpress_cluster" {
+  cluster_name       = aws_ecs_cluster.wordpress_cluster.name
+  capacity_providers = [var.graviton_fargate_enabled ? (contains(local.graviton_fargate_regions_unsupported, data.aws_region.current) ? "FARGATE_SPOT" : "FARGATE") : "FARGATE_SPOT"]
   default_capacity_provider_strategy {
-    capacity_provider = "FARGATE_SPOT"
+    capacity_provider = var.graviton_fargate_enabled ? (contains(local.graviton_fargate_regions_unsupported, data.aws_region.current) ? "FARGATE_SPOT" : "FARGATE") : "FARGATE_SPOT"
     weight            = "100"
     base              = "1"
   }

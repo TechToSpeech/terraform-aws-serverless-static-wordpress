@@ -1,12 +1,17 @@
 ARG aws_account_id
 ARG aws_region
 ARG ecr_repo_name
+ARG wp2static_version
+ARG wp2static_s3_addon_version
 
 FROM ${aws_account_id}.dkr.ecr.${aws_region}.amazonaws.com/${ecr_repo_name}:base
-COPY ["wp-cli.phar", "serverless-wordpress-wp2static.zip","serverless-wordpress-s3-addon.zip","/tmp/"]
+COPY ["wp-cli.phar", "/tmp/"]
 COPY docker-entrypoint.sh /usr/local/bin/
 RUN apt-get update && apt-get install -y sudo jq awscli mariadb-client && chmod +x /usr/local/bin/docker-entrypoint.sh && chmod +x /tmp/wp-cli.phar && mv /tmp/wp-cli.phar /usr/local/bin/wp \
 && rm -rf /var/lib/apt/lists/*
+
+RUN curl https://github.com/WP2Static/wp2static/archive/refs/tags/${wp2static_version}.zip -o /tmp/serverless-wordpress-wp2static.zip
+RUN curl https://github.com/leonstafford/wp2static-addon-s3/archive/refs/tags/${wp2static_s3_addon_version}.zip -o /tmp/serverless-wordpress-s3-addon.zip
 
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 COPY ["php.ini", "$PHP_INI_DIR/conf.d/"]

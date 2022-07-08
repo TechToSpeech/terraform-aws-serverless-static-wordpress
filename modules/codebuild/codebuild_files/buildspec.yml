@@ -21,7 +21,9 @@ phases:
         docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG --build-arg
         aws_account_id=$AWS_ACCOUNT_ID --build-arg
         aws_region=$AWS_DEFAULT_REGION --build-arg
-        ecr_repo_name=$IMAGE_REPO_NAME -f Dockerfile_serverless_wordpress .
+        ecr_repo_name=$IMAGE_REPO_NAME --build-arg
+        wp2static_version=$WP2STATIC_VERSION --build-arg
+        wp2static_s3_addon_version=$WP2STATIC_S3_ADDON_VERSION  -f Dockerfile_serverless_wordpress .
       # yamllint disable-line rule:line-length
       - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
   post_build:

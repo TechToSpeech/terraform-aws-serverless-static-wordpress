@@ -7,7 +7,7 @@ jobs:
   pre-commit:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2.3.4
+      - uses: actions/checkout@v3.0.2
       - name: Set up Python
         uses: actions/setup-python@v2.2.2
       - name: Install prerequisites
@@ -24,7 +24,7 @@ jobs:
             no-commit-to-branch,
             terraform_tflint_nocreds,
             terraform_tfsec
-      - uses: stefanzweifel/git-auto-commit-action@v4.11.0
+      - uses: stefanzweifel/git-auto-commit-action@v4.14.1
         if: ${{ failure() }}
         with:
           commit_message: Apply automatic changes
@@ -36,11 +36,11 @@ jobs:
   tflint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2.3.4
+      - uses: actions/checkout@v3.0.2
       - name: setup Terraform
-        uses: hashicorp/setup-terraform@v1.3.2
+        uses: hashicorp/setup-terraform@v2.0.0
         with:
-          terraform_version: 0.15.5
+          terraform_version: 1.1.7
       - name: Terraform init
         run: terraform init --backend=false
       - name: tflint
@@ -54,11 +54,11 @@ jobs:
   tfsec:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2.3.4
+      - uses: actions/checkout@v3.0.2
       - name: setup Terraform
-        uses: hashicorp/setup-terraform@v1.3.2
+        uses: hashicorp/setup-terraform@v2.0.0
         with:
-          terraform_version: 0.15.5
+          terraform_version: 1.1.7
       - name: Terraform init
         run: terraform init --backend=false
       - name: tfsec
@@ -71,21 +71,21 @@ jobs:
   misspell:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2.3.4
+      - uses: actions/checkout@v3.0.2
       - name: misspell
-        uses: reviewdog/action-misspell@v1
+        uses: reviewdog/action-misspell@v1.12.0
         with:
           github_token: ${{ secrets.ACTIONS_TOKEN }}
-          locale: "US"
+          locale: "UK"
           reporter: github-pr-check
           filter_mode: added
           level: error
   yamllint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2.3.4
+      - uses: actions/checkout@v3.0.2
       - name: yamllint
-        uses: reviewdog/action-yamllint@v1.2.0
+        uses: reviewdog/action-yamllint@v1.6.0
         with:
           github_token: ${{ secrets.ACTIONS_TOKEN }}
           reporter: github-pr-check
