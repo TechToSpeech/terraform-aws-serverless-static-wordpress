@@ -66,6 +66,11 @@ resource "aws_cloudfront_distribution" "wordpress_distribution" {
       function_arn = aws_cloudfront_function.object_rewrite.arn
     }
 
+    function_association {
+      event_type   = "viewer-response"
+      function_arn = aws_cloudfront_function.viewer_response.arn
+    }
+
     viewer_protocol_policy = "redirect-to-https"
     min_ttl                = 0
     default_ttl            = 600
@@ -86,7 +91,6 @@ resource "aws_cloudfront_distribution" "wordpress_distribution" {
     ssl_support_method       = "sni-only"
 
   }
-
 }
 
 resource "aws_s3_bucket_policy" "wordpress_bucket" {

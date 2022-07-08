@@ -23,3 +23,21 @@ resource "aws_cloudfront_function" "object_rewrite" {
     }
   )
 }
+
+#tfsec:ignore:AWS089
+resource "aws_cloudwatch_log_group" "viewer_response_function" {
+  name              = "/aws/cloudfront/function/${var.site_name}_viewer_response"
+  retention_in_days = 7
+  provider          = aws.ue1
+}
+
+resource "aws_cloudfront_function" "viewer_response" {
+  depends_on = [
+    aws_cloudwatch_log_group.viewer_response_function
+  ]
+
+  name    = "${var.site_name}_viewer_response"
+  runtime = "cloudfront-js-1.0"
+  publish = true
+  code    = file("${path.module}/functions/viewer_response.js")
+}
