@@ -224,3 +224,9 @@ variable "graviton_fargate_enabled" {
   default     = false
   description = "Flag that controls whether ECS Fargate should use Graviton-based containers in [supported regions]https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate-Regions.html)."
 }
+
+variable "ecr_untagged_retention_days" {
+  type        = number
+  default     = 7
+  description = "The number of days to keep untagged images for."
+}
