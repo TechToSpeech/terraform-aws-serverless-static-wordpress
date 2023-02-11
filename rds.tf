@@ -44,7 +44,7 @@ resource "aws_rds_cluster" "serverless_wordpress" {
   db_subnet_group_name                = aws_db_subnet_group.main_vpc.name
   cluster_identifier                  = "${var.site_name}-serverless-wordpress"
   engine                              = "aurora-mysql"
-  engine_version                      = "5.7.mysql_aurora.2.07.1"
+  engine_version                      = "5.7"
   engine_mode                         = "serverless"
   database_name                       = "wordpress"
   master_username                     = "wp_master"
