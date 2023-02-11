@@ -237,10 +237,16 @@ resource "aws_ecs_service" "wordpress_service" {
 #tfsec:ignore:AWS090
 resource "aws_ecs_cluster" "wordpress_cluster" {
   name               = "${var.site_name}_wordpress"
+}
+
+resource "aws_ecs_cluster_capacity_providers" "example" {
+  cluster_name = aws_ecs_cluster.wordpress_cluster.name
+
   capacity_providers = ["FARGATE_SPOT"]
+
   default_capacity_provider_strategy {
+    base              = 1
+    weight            = 100
     capacity_provider = "FARGATE_SPOT"
-    weight            = "100"
-    base              = "1"
   }
 }
