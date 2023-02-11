@@ -5,13 +5,20 @@ data "aws_region" "current" {}
 #tfsec:ignore:AWS002 #tfsec:ignore:AWS077
 resource "aws_s3_bucket" "code_source" {
   bucket        = var.codebuild_bucket
-  acl           = "private"
   force_destroy = true
-  server_side_encryption_configuration {
-    rule {
-      apply_server_side_encryption_by_default {
-        sse_algorithm = "AES256"
-      }
+}
+
+resource "aws_s3_bucket_acl" "example_bucket_acl" {
+  bucket = aws_s3_bucket.code_source.id
+  acl    = "private"
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "code_source" {
+  bucket = aws_s3_bucket.code_source.id
+
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm     = "AES256"
     }
   }
 }
@@ -55,7 +62,7 @@ resource "aws_iam_role_policy_attachment" "codebuild_role_attachment" {
   policy_arn = "arn:aws:iam::aws:policy/PowerUserAccess"
 }
 
-resource "aws_s3_bucket_object" "wordpress_dockerbuild" {
+resource "aws_s3_object" "wordpress_dockerbuild" {
   bucket = aws_s3_bucket.code_source.id
   key    = "wordpress_docker.zip"
   source = "${path.module}/codebuild_files/wordpress_docker.zip"
@@ -133,7 +140,7 @@ resource "aws_codebuild_project" "wordpress_docker_build" {
 
   source {
     type     = "S3"
-    location = "${aws_s3_bucket.code_source.id}/${aws_s3_bucket_object.wordpress_dockerbuild.id}"
+    location = "${aws_s3_bucket.code_source.id}/${aws_s3_object.wordpress_dockerbuild.id}"
 
   }
 }

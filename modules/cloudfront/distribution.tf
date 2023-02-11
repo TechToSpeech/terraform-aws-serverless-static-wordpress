@@ -4,11 +4,14 @@
 resource "aws_s3_bucket" "wordpress_bucket" {
   bucket        = "${var.site_prefix}.${var.site_domain}"
   force_destroy = true
-  server_side_encryption_configuration {
-    rule {
-      apply_server_side_encryption_by_default {
-        sse_algorithm = "AES256"
-      }
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "wordpress_bucket" {
+  bucket = aws_s3_bucket.wordpress_bucket.id
+
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm     = "AES256"
     }
   }
 }
