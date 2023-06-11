@@ -220,6 +220,14 @@ that generates this file and the crawl job can fail fast if it cannot locate it.
 relating to WP2Static, [raise an issue on their repo](https://github.com/leonstafford/wp2static/issues).
 For any issues relating to this module, [raise an issue against this repo.](https://github.com/TechToSpeech/terraform-aws-serverless-static-wordpress/issues)
 
+## Alternatives
+
+An alternative written for [AWS Cloud Development Kit (CDK)](https://docs.aws.amazon.com/cdk/v2/guide/home.html), is
+available at [`blimmer/cdk-static-wordpress`](https://github.com/blimmer/cdk-static-wordpress). Many open issues
+on this repository have been resolved in the other project. Additionally, the almost any arbitrary property on the
+infrastructure [can be customized](https://github.com/blimmer/cdk-static-wordpress#escape-hatches), allowing additional
+flexibility.
+
 ## Inputs
 
 | Name | Description | Type | Default | Required |
